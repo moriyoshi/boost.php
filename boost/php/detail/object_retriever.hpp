@@ -29,9 +29,9 @@
 #define MOZO_PHP_DETAIL_OBJECT_RETRIEVER_HPP
 
 #include <zend.h>
-#include <mozo/php/detail/signature.hpp>
+#include <boost/php/detail/signature.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 // must be specialized somewhere
 template<typename Tobj_>
@@ -55,6 +55,6 @@ namespace detail {
     }
 } // namespace detail
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_DETAIL_OBJECT_RETRIEVER_HPP */

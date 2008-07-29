@@ -39,11 +39,11 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 
-#include <mozo/php/detail/signature.hpp>
+#include <boost/php/detail/signature.hpp>
 
 #include <zend.h>
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 template<typename T_>
 struct mpl_should_pass_by_ref { 
@@ -124,6 +124,6 @@ zend_arg_info* create_arg_info(const Tsig_&)
             new typename concrete_arg_info_enclosure<Tsig_::arity_value::value >::template arg_info<Tsig_>());
 }
 
-} } } // namespace mozo::php::detail
+} } } // namespace boost::php::detail
 
 #endif /* MOZO_PHP_DETAIL_ARG_INFO_FACTORY_HPP */

@@ -36,12 +36,12 @@
 
 #include <zend.h>
 #include <zend_variables.h>
-#include <mozo/php/detail/value_helpers.hpp>
+#include <boost/php/detail/value_helpers.hpp>
 
 #ifndef MOZO_PHP_HASHTABLE_KEY_DEFINED
 #define MOZO_PHP_HASHTABLE_KEY_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class hashtable_key: public ::zend_hash_key {
 public:
@@ -64,14 +64,14 @@ public:
     }
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_HASHTABLE_KEY_DEFINED */
 
 #ifndef MOZO_PHP_SYMTABLE_KEY_DEFINED
 #define MOZO_PHP_SYMTABLE_KEY_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class symtable_key: public ::zend_hash_key {
 public:
@@ -109,14 +109,14 @@ private:
     void init(const char* str, ::uint str_len);
 };
 
-} } //namespace mozo::php
+} } //namespace boost::php
 
 #endif /* MOZO_PHP_SYMTABLE_KEY_DEFINED */
 
 #ifndef MOZO_PHP_HASHTABLE_DEFINED
 #define MOZO_PHP_HASHTABLE_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename Telem_, typename Tkey_ = hashtable_key>
 class hashtable: public ::HashTable {
@@ -397,16 +397,16 @@ public:
     }
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_HASHTABLE_DEFINED */
 
-#include <mozo/php/exceptions.hpp>
+#include <boost/php/exceptions.hpp>
 
 #ifndef MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
 #define MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 inline hashtable_key::hashtable_key(string& v)
 {
@@ -431,14 +431,14 @@ inline hashtable_key::hashtable_key(const char* str, ::std::size_t str_len)
     h = 0;
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */
 
 #ifndef MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
 #define MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 inline void symtable_key::init(const char* str, ::uint str_len)
 {
@@ -455,14 +455,14 @@ inline void symtable_key::init(const char* str, ::uint str_len)
 #endif
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED */
 
 #ifndef MOZO_PHP_HASHTABLE_MEMBERS_DEFINED
 #define MOZO_PHP_HASHTABLE_MEMBERS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename Telem_, typename Tkey_>
 inline typename hashtable<Telem_, Tkey_>::mapped_type&
@@ -511,6 +511,6 @@ hashtable<Telem_, Tkey_>::operator[](const key_type& k) const
             + static_cast< ::std::string>(k) + "]");
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */

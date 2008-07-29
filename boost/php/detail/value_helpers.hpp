@@ -31,7 +31,7 @@
 #include <zend.h>
 #include <boost/type_traits.hpp>
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 template<typename Tval_, typename TisPOD_>
 struct _value_dtor_fun {
@@ -89,6 +89,6 @@ struct value_copy_ctor_fun< ::zval> {
     }
 };
 
-} } } // namespace mozo::php::detail
+} } } // namespace boost::php::detail
 
 #endif /* MOZO_PHP_DETAIL_VALUE_HELPERS_HPP */

@@ -32,14 +32,14 @@
 #include <cstdlib>
 #include <zend_API.h>
 #include <boost/mpl/vector.hpp>
-#include <mozo/php/detail/function_template.hpp>
-#include <mozo/php/detail/function_container.hpp>
-#include <mozo/php/detail/object_retriever.hpp>
-#include <mozo/php/object.hpp>
-#include <mozo/php/exceptions.hpp>
+#include <boost/php/detail/function_template.hpp>
+#include <boost/php/detail/function_container.hpp>
+#include <boost/php/detail/object_retriever.hpp>
+#include <boost/php/object.hpp>
+#include <boost/php/exceptions.hpp>
 #include <iostream>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename T_>
 class klass: public ::zend_class_entry, public function_container<klass<T_> > {
@@ -171,16 +171,16 @@ static klass<T_>& def_class(char const* name TSRMLS_DC)
     return def_class<T_, ::boost::mpl::vector0<> >(name, ::boost::mpl::vector0<>() TSRMLS_CC);
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 template<typename T_>
-void intrusive_ptr_add_ref(::mozo::php::klass<T_>* ptr)
+void intrusive_ptr_add_ref(::boost::php::klass<T_>* ptr)
 {
     ++ptr->refcount;
 }
 
 template<typename T_>
-void intrusive_ptr_release(::mozo::php::klass<T_>* ptr)
+void intrusive_ptr_release(::boost::php::klass<T_>* ptr)
 {
     ::destroy_zend_class(&ptr);
 }
@@ -188,9 +188,9 @@ void intrusive_ptr_release(::mozo::php::klass<T_>* ptr)
 
 #ifndef MOZO_PHP_KLASS_STD_CONVERTER_DEFINED
 #define MOZO_PHP_KLASS_STD_CONVERTER_DEFINED
-#include <mozo/php/converter.hpp>
+#include <boost/php/converter.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename T_>
 struct to_native_converter<T_, false> {
@@ -213,5 +213,5 @@ struct to_native_converter<T_, false> {
     }
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 #endif /* MOZO_PHP_KLASS_STD_CONVERTER_DEFINED */

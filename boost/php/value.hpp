@@ -35,9 +35,9 @@
 #include <zend.h>
 #include <zend_variables.h>
 #include <zend_operators.h>
-#include <mozo/php/string.hpp>
-#include <mozo/php/resource_handle.hpp>
-#include <mozo/php/detail/tsrm_macros.hpp>
+#include <boost/php/string.hpp>
+#include <boost/php/resource_handle.hpp>
+#include <boost/php/detail/tsrm_macros.hpp>
 
 #ifndef MOZO_PHP_VALUE_DEFINED
 #define MOZO_PHP_VALUE_DEFINED
@@ -52,7 +52,7 @@
 #define MOZO_PHP_ZVAL_ADDREF(p) Z_ADDREF_P(p)
 #endif /* ZEND_MODULE_API_NO < 20071006 */
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class value_ptr;
 class symtable_key;
@@ -558,17 +558,17 @@ protected:
     value* p_;
 };
 
-} } // namespace mozo::php 
+} } // namespace boost::php 
 
 #endif /* MOZO_PHP_VALUE_PTR_DEFINED */
 
-#include <mozo/php/exceptions.hpp>
-#include <mozo/php/hashtable.hpp>
+#include <boost/php/exceptions.hpp>
+#include <boost/php/hashtable.hpp>
 
 #ifndef MOZO_PHP_VALUE_MEMBERS_DEFINED
 #define MOZO_PHP_VALUE_MEMBERS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 typedef hashtable<value_ptr, symtable_key> array;
 
@@ -889,7 +889,7 @@ inline value::operator string&() {
     if (::zval::type != _STRING) {
         throw type_error(
                 ::std::string(get_type_string(::zval::type))
-                + " value cannot be cast to mozo::php::string");
+                + " value cannot be cast to boost::php::string");
     }
     return *reinterpret_cast<string*>(&::zval::value.str);
 }
@@ -898,7 +898,7 @@ inline value::operator string const&() const {
     if (::zval::type != _STRING) {
         throw type_error(
                 ::std::string(get_type_string(::zval::type))
-                + " value cannot be cast to mozo::php::string");
+                + " value cannot be cast to boost::php::string");
     }
     return *reinterpret_cast<const string*>(&::zval::value.str);
 }
@@ -988,14 +988,14 @@ inline value::operator ::zend_object_value const&() const
     return ::zval::value.obj;
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_VALUE_MEMBERS_DEFINED */
 
 #ifndef MOZO_PHP_VALUE_PTR_MEMBER_DEFINED
 #define MOZO_PHP_VALUE_PTR_MEMBER_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<enum value::typecode TYPE_>
 inline value_ptr const value_ptr::as() const
@@ -1018,9 +1018,9 @@ inline value_ptr value_ptr::as()
     return *this;
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_VALUE_PTR_MEMBER_DEFINED */
 
-#include <mozo/php/converter.hpp>
-#include <mozo/php/detail/stream_support.hpp>
+#include <boost/php/converter.hpp>
+#include <boost/php/detail/stream_support.hpp>

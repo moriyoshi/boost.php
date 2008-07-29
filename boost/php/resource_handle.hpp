@@ -28,7 +28,7 @@
 #ifndef MOZO_RESOURCE_HANDLE_HPP
 #define MOZO_RESOURCE_HANDLE_HPP
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class resource_handle {
 public:
@@ -52,6 +52,6 @@ private:
     long value_;
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_RESOURCE_HANDLE_HPP */

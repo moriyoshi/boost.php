@@ -37,11 +37,11 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
-#include <mozo/php/value.hpp>
-#include <mozo/php/utils.hpp>
-#include <mozo/php/detail/tsrm_macros.hpp>
+#include <boost/php/value.hpp>
+#include <boost/php/utils.hpp>
+#include <boost/php/detail/tsrm_macros.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class function {
 public:
@@ -117,7 +117,7 @@ private:
     MOZO_PHP_TSRM_MEMBER;
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 
 #endif /* MOZO_PHP_FUNCTION_TEMPLATE_HPP */

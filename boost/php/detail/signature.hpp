@@ -42,9 +42,9 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
-#include <mozo/php/detail/functional.hpp>
+#include <boost/php/detail/functional.hpp>
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 template<typename Tfun_>
 struct signature {
@@ -136,6 +136,6 @@ BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_SIGNATURE_TPL
 #undef __MOZO_PHP_SIGNATURE_TPL_F
 #undef __MOZO_PHP_SIGNATURE_TPL
 
-} } } // namespace mozo::php::detail
+} } } // namespace boost::php::detail
 
 #endif /* MOZO_PHP_DETAIL_SIGNATURE_HPP */

@@ -37,10 +37,10 @@
 #include <zend_modules.h>
 #include <zend_ini.h>
 
-#include <mozo/php/detail/tsrm_macros.hpp>
-#include <mozo/php/detail/module_macros.hpp>
+#include <boost/php/detail/tsrm_macros.hpp>
+#include <boost/php/detail/module_macros.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 namespace detail {
     class module_dependency_base: public zend_module_dep {
@@ -189,6 +189,6 @@ public:
     module(zend_module_entry* entry) {}
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_MODULE_HPP */

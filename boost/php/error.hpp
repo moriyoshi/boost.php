@@ -34,7 +34,7 @@
 #include <zend.h>
 #include <main/php.h>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 class error_info {
 public:
     error_info(): type_(-1), filename_(), line_number_(0), message_() {}
@@ -136,16 +136,16 @@ namespace detail {
 
     private:
         error_captor* prev_;
-        ::mozo::php::error_info captured_;
+        ::boost::php::error_info captured_;
         handler_type old_handler_;
     };
 } // namespace detail
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #define MOZO_PHP_BEGIN_CAPTURE_ERROR \
     { \
-        ::mozo::php::detail::error_captor __mozo_php_error_cap;
+        ::boost::php::detail::error_captor __mozo_php_error_cap;
 
 #define MOZO_PHP_END_CAPTURE_ERROR \
     }

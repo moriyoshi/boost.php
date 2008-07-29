@@ -29,7 +29,7 @@
 #define MOZO_PHP_FUNCTION_HPP
 
 #include <zend.h>
-#include <mozo/php/detail/function_template.hpp>
-#include <mozo/php/detail/function_container.hpp>
+#include <boost/php/detail/function_template.hpp>
+#include <boost/php/detail/function_container.hpp>
 
 #endif /* MOZO_PHP_FUNCTION_HPP */

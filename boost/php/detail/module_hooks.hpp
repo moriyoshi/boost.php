@@ -28,7 +28,7 @@
 #ifndef MOZO_PHP_MODULE_HOOKS_HPP
 #define MOZO_PHP_MODULE_HOOKS_HPP
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 template<typename T_>
 struct hook_list
@@ -71,6 +71,6 @@ struct module_hooks
     static module_hooks singleton;
 };
 
-} } } // namespace mozo::php::detail::module_hook
+} } } // namespace boost::php::detail::module_hook
 
 #endif /* MOZO_PHP_MODULE_HOOKS_HPP */

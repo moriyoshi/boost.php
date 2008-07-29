@@ -44,7 +44,7 @@
 #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 struct constructor_mark {};
 
@@ -132,6 +132,6 @@ BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_FUNCTIONAL_TP
 #undef __MOZO_PHP_FUNCTIONAL_TPL_F
 #undef __MOZO_PHP_FUNCTIONAL_TPL
 
-} } } // namespace mozo::php::detail
+} } } // namespace boost::php::detail
 
 #endif /* MOZO_PHP_DETAIL_FUNCTIONAL_HPP */

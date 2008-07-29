@@ -1,9 +1,9 @@
-#include "mozo/php/module.hpp"
-#include "mozo/php/function.hpp"
-#include "mozo/php/klass.hpp"
+#include "boost/php/module.hpp"
+#include "boost/php/function.hpp"
+#include "boost/php/klass.hpp"
 #include <iostream>
 
-using namespace mozo;
+using namespace boost;
 
 class test {
 public:
@@ -51,4 +51,4 @@ public:
 #define MOZO_PHP_MODULE_VERSION "0.1"
 #define MOZO_PHP_MODULE_CLASS_NAME m008_module
 
-#include "mozo/php/module_def.hpp"
+#include "boost/php/module_def.hpp"

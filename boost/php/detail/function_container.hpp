@@ -35,10 +35,10 @@
 
 #include <zend.h>
 
-#include <mozo/php/detail/arg_info_factory.hpp>
-#include <mozo/php/detail/native_fun_proxy.hpp>
+#include <boost/php/detail/arg_info_factory.hpp>
+#include <boost/php/detail/native_fun_proxy.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 struct function_entry: public ::zend_function_entry {
     function_entry() {
@@ -173,6 +173,6 @@ template<typename T_>
 typename function_container<T_>::handler_map_type*
 function_container<T_>::handlers_;
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_DETAIL_FUNCTION_CONTAINER_HPP */

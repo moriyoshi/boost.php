@@ -37,11 +37,11 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 
-#include <mozo/php/detail/signature.hpp>
+#include <boost/php/detail/signature.hpp>
 
 #include <zend.h>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class caller_base {
 public:
@@ -119,6 +119,6 @@ inline caller_base* create_caller(const Tsig_& sig)
     return new caller<Tsig_>(sig.impl);
 }
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_DETAIL_CALLER_HPP */

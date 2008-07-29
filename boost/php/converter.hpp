@@ -28,7 +28,7 @@
 #include <zend.h>
 
 #ifndef MOZO_PHP_VALUE_PTR_DEFINED
-#include <mozo/php/value.hpp>
+#include <boost/php/value.hpp>
 #endif /* MOZO_PHP_VALUE_PTR_DEFINED */
 
 #ifndef MOZO_PHP_TO_NATIVE_CONVERTER_DEFINED
@@ -40,7 +40,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 namespace detail {
     template<typename T_>
@@ -124,12 +124,12 @@ struct to_native_converter<resource_handle, true> {
     };
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 #endif /* MOZO_PHP_TO_NATIVE_CONVERTER_DEFINED */
 
 #ifndef MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
 #define MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename Tnative_>
 struct to_value_ptr_converter {
@@ -166,12 +166,12 @@ struct to_value_ptr_converter<value_ptr const&> {
     }
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 #endif /* MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED */
 
 #ifndef MOZO_PHP_VALUE_PTR_UTILS_DEFINED
 #define MOZO_PHP_VALUE_PTR_UTILS_DEFINED
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 template<typename Tsrc_>
 inline value_ptr to_value_ptr(Tsrc_ const& val TSRMLS_DC)
@@ -193,6 +193,6 @@ inline T_& to_native(value_ptr& val TSRMLS_DC)
     static to_native_converter<typename boost::remove_reference<T_>::type> converter;
     return converter(val TSRMLS_CC);
 }
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_VALUE_PTR_UTILS_DEFINED */

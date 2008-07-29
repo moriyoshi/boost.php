@@ -34,24 +34,24 @@
 #include <cstdlib>
 #include <zend_compile.h>
 
-namespace mozo { namespace php { namespace utils {
+namespace boost { namespace php { namespace utils {
 
 static const char* current_filename();
 static ::uint current_line_number();
 static std::string
-callable_name_to_string(const ::mozo::php::value& callable_zv TSRMLS_DC);
+callable_name_to_string(const ::boost::php::value& callable_zv TSRMLS_DC);
 static void
 print_error(int type, const char* filename, ::uint lineno, const char* msg);
 static void
 print_errorf(int type, const char* filename, ::uint lineno, const char* format,
         ...);
 
-} } } // namespace mozo::php::utils
+} } } // namespace boost::php::utils
 
-#include <mozo/php/value.hpp>
-#include "mozo/php/exceptions.hpp"
+#include <boost/php/value.hpp>
+#include "boost/php/exceptions.hpp"
 
-namespace mozo { namespace php { namespace utils {
+namespace boost { namespace php { namespace utils {
 
 static const char* current_filename()
 {
@@ -68,20 +68,20 @@ static ::uint current_line_number()
 }
 
 static std::string
-callable_name_to_string(const ::mozo::php::value& callable_zv TSRMLS_DC)
+callable_name_to_string(const ::boost::php::value& callable_zv TSRMLS_DC)
 {
     char* callable_name = 0;
     int callable_name_len = 0;
 
 #if ZEND_MODULE_API_NO < 20071006
-    if (!zend_is_callable_ex(&const_cast< ::mozo::php::value&>(callable_zv),
+    if (!zend_is_callable_ex(&const_cast< ::boost::php::value&>(callable_zv),
             IS_CALLABLE_CHECK_SYNTAX_ONLY, &callable_name,
             &callable_name_len, NULL, NULL, NULL TSRMLS_CC)) {
         throw illegal_argument("specified object is not callable");
     }
 #else
     char *_msg;
-    if (!zend_is_callable_ex(&const_cast< ::mozo::php::value&>(callable_zv),
+    if (!zend_is_callable_ex(&const_cast< ::boost::php::value&>(callable_zv),
             IS_CALLABLE_CHECK_SYNTAX_ONLY, &callable_name,
             &callable_name_len, NULL, NULL, NULL, &_msg TSRMLS_CC)) {
         std::string msg(_msg);
@@ -111,6 +111,6 @@ print_errorf(int type, const char* filename, ::uint lineno, const char* format,
     va_end(ap);
 }
 
-} } } // namespace mozo::php::utils
+} } } // namespace boost::php::utils
 
 #endif /* MOZO_PHP_UTILS_HPP */

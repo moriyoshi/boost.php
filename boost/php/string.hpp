@@ -34,7 +34,7 @@
 #include <boost/assert.hpp>
 #include <zend.h>
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 
 class string {
@@ -128,6 +128,6 @@ private:
     ::zvalue_value data_;
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_STRING_HPP */

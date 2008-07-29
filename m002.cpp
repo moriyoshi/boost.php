@@ -1,7 +1,7 @@
-#include "mozo/php/module.hpp"
-#include "mozo/php/function.hpp"
+#include "boost/php/module.hpp"
+#include "boost/php/function.hpp"
 
-using namespace mozo;
+using namespace boost;
 
 class m002_module
     : public php::module,
@@ -35,4 +35,4 @@ public:
 #define MOZO_PHP_MODULE_VERSION "0.1"
 #define MOZO_PHP_MODULE_CLASS_NAME m002_module
 
-#include "mozo/php/module_def.hpp"
+#include "boost/php/module_def.hpp"

@@ -30,15 +30,15 @@
 
 #include <ostream>
 #include <boost/config.hpp>
-#include <mozo/php/value.hpp>
+#include <boost/php/value.hpp>
 
 # if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300 && __SGI_STL_PORT)
 using ::std::basic_ostream;
 template<class E, class T> basic_ostream<E, T>&
-operator<<(::basic_ostream<E, T>& os, const ::mozo::php::string::& p)
+operator<<(::basic_ostream<E, T>& os, const ::boost::php::string::& p)
 # else
 template<class E, class T> ::std::basic_ostream<E, T>&
-operator<<(::std::basic_ostream<E, T>& os, const ::mozo::php::string& p)
+operator<<(::std::basic_ostream<E, T>& os, const ::boost::php::string& p)
 # endif
 {
     BOOST_ASSERT(p.data());
@@ -55,14 +55,14 @@ template<class E, class T> ::std::basic_ostream<E, T>&
 operator<<(::std::basic_ostream<E, T>& os, const ::zval& p)
 # endif
 {
-    if (p.type == ::mozo::php::value::_STRING) {
-        os << static_cast<const ::mozo::php::string&>(
-                reinterpret_cast<const ::mozo::php::value&>(p));
+    if (p.type == ::boost::php::value::_STRING) {
+        os << static_cast<const ::boost::php::string&>(
+                reinterpret_cast<const ::boost::php::value&>(p));
     } else {
-        os << static_cast<const ::mozo::php::string&>(
-                ::mozo::php::value(
-                    reinterpret_cast<const ::mozo::php::value&>(p),
-                    ::mozo::php::value::_STRING));
+        os << static_cast<const ::boost::php::string&>(
+                ::boost::php::value(
+                    reinterpret_cast<const ::boost::php::value&>(p),
+                    ::boost::php::value::_STRING));
     }
     return os;
 }
@@ -70,10 +70,10 @@ operator<<(::std::basic_ostream<E, T>& os, const ::zval& p)
 # if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300 && __SGI_STL_PORT)
 using ::std::basic_ostream;
 template<class E, class T> basic_ostream<E, T>&
-operator<<(::basic_ostream<E, T>& os, const ::mozo::php::value_ptr& p)
+operator<<(::basic_ostream<E, T>& os, const ::boost::php::value_ptr& p)
 # else
 template<class E, class T> ::std::basic_ostream<E, T>&
-operator<<(::std::basic_ostream<E, T>& os, const ::mozo::php::value_ptr& p)
+operator<<(::std::basic_ostream<E, T>& os, const ::boost::php::value_ptr& p)
 # endif
 {
     os << (*p);

@@ -28,12 +28,12 @@
 #include <string>
 #include <stdexcept>
 #include <zend.h>
-#include <mozo/php/error.hpp>
+#include <boost/php/error.hpp>
 
 #ifndef MOZO_PHP_RUNTIME_ERROR_DEFINED
 #define MOZO_PHP_RUNTIME_ERROR_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 class runtime_error: public ::std::runtime_error {
 public:
     runtime_error(const error_info& err);
@@ -56,14 +56,14 @@ protected:
     const ::uint line_number_;
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_RUNTIME_ERROR_DEFINED */
 
 #ifndef MOZO_PHP_MISC_ERRORS_DEFINED
 #define MOZO_PHP_MISC_ERRORS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class arithmetic_error: public runtime_error {
 public:
@@ -113,16 +113,16 @@ public:
     virtual ~illegal_argument() throw() {}
 };
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_MISC_ERRORS_DEFINED */
 
-#include <mozo/php/utils.hpp>
+#include <boost/php/utils.hpp>
 
 #ifndef MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
 #define MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 inline runtime_error::runtime_error(const error_info& err)
     : filename_(err.filename()), line_number_(err.line_number()),
@@ -132,9 +132,9 @@ inline runtime_error::runtime_error(const ::std::string msg,
     const char* filename, const ::uint lineno)
     : filename_(filename ? filename: utils::current_filename()),
       line_number_(filename ? lineno:
-            ::mozo::php::utils::current_line_number()),
+            ::boost::php::utils::current_line_number()),
       ::std::runtime_error(msg) {}
 
-} } // namespace mozo::php
+} } // namespace boost::php
 
 #endif /* MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED */

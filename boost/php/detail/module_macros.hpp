@@ -28,25 +28,25 @@
 #ifndef MOZO_PHP_MODULE_MACROS_HPP
 #define MOZO_PHP_MODULE_MACROS_HPP
 
-#include <mozo/php/detail/object_retriever.hpp>
-#include <mozo/php/detail/module_hooks.hpp>
+#include <boost/php/detail/object_retriever.hpp>
+#include <boost/php/detail/module_hooks.hpp>
 
 #define MOZO_PHP_ADD_MODULE_VARIATION(__mod_name__) \
-    namespace mozo { namespace php { namespace _ { \
+    namespace boost { namespace php { namespace _ { \
         struct __mod_name__ {}; \
     } } }
 
 #define MOZO_PHP_ASSOCIATE_MODULE_WITH_CLASS(__mod_name__, __mod_klass__) \
-    namespace mozo { namespace php { namespace detail { \
-    template<> struct module_class_of< ::mozo::php::_::__mod_name__> { \
+    namespace boost { namespace php { namespace detail { \
+    template<> struct module_class_of< ::boost::php::_::__mod_name__> { \
         typedef __mod_klass__ type; \
     }; \
     } } }
 
 #define MOZO_PHP_MODULE_CLASS(__mod_name__) \
-    ::mozo::php::detail::module_class_of< ::mozo::php::_::__mod_name__>::type
+    ::boost::php::detail::module_class_of< ::boost::php::_::__mod_name__>::type
 #define MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__) \
-    ::mozo::php::detail::module_class_of< ::mozo::php::_::__mod_name__>::type::handler
+    ::boost::php::detail::module_class_of< ::boost::php::_::__mod_name__>::type::handler
 #define MOZO_PHP_MODULE_HANDLER(__mod_name__) \
     BOOST_PP_CAT(__mod_name__, _globals)
 #define MOZO_PHP_MODULE_VAR(__mod_name__) \
@@ -227,17 +227,17 @@ extern "C" { \
 
 #define MOZO_PHP_MODULE_INVOKE_HOOKS(__mod_name__, __kind__) \
     MOZO_PHP_MODULE_EACH_HOOK( \
-            ::mozo::php::detail::module_hooks::__kind__##_type, \
+            ::boost::php::detail::module_hooks::__kind__##_type, \
             MOZO_PHP_MODULE_HOOKS(__mod_name__).__kind__, _())
 
 #define MOZO_PHP_MODULE_EACH_HOOK(__type__, __list__, __action__) \
     for (__type__* _ = __list__.first; _; _ = _->next) { __action__ }
 
 #define MOZO_PHP_MODULE_HOOKS(__mod_name__) \
-    ::mozo::php::detail::module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) >
+    ::boost::php::detail::module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) >
 
 #define MOZO_PHP_DECLARE_MODULE_HOOKS(__mod_name__) \
-    namespace mozo { namespace php { namespace detail { \
+    namespace boost { namespace php { namespace detail { \
     template<> \
     module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) > \
     module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) >::singleton; \
@@ -279,7 +279,7 @@ extern "C" { \
     MOZO_PHP_DECLARE_MODULE_HOOKS(__mod_name__);
 
 #define MOZO_PHP_DECLARE_HANDLER_RETRIEVER(__mod_name__) \
-    namespace mozo { namespace php { \
+    namespace boost { namespace php { \
         template<> \
         MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* \
         object_retriever<MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)>:: \

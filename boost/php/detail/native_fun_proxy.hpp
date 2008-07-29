@@ -38,13 +38,13 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 
-#include <mozo/php/detail/signature.hpp>
-#include <mozo/php/detail/object_retriever.hpp>
+#include <boost/php/detail/signature.hpp>
+#include <boost/php/detail/object_retriever.hpp>
 
 #include <zend.h>
 #include <zend_execute.h>
 
-namespace mozo { namespace php { namespace detail {
+namespace boost { namespace php { namespace detail {
 
 class native_fun_proxy_base {
 public:
@@ -96,8 +96,8 @@ public:
                     EG(argument_stack).top_element - 2 - num_params ); \
             try { \
                 __invoke__(__z__, __arity__, obj); \
-            } catch (const ::mozo::php::runtime_error& e) { \
-                ::mozo::php::utils::print_error(E_WARNING, \
+            } catch (const ::boost::php::runtime_error& e) { \
+                ::boost::php::utils::print_error(E_WARNING, \
                         e.filename().c_str(), e.line_number(), e.what()); \
             } catch (const ::std::exception& e) { \
                 zend_error(E_WARNING, "%s", e.what()); \
@@ -130,8 +130,8 @@ public:
                     EG(argument_stack)->top - 1 - num_params ); \
             try { \
                 __invoke__(__z__, __arity__, obj); \
-            } catch (const ::mozo::php::runtime_error& e) { \
-                ::mozo::php::utils::print_error(E_WARNING, \
+            } catch (const ::boost::php::runtime_error& e) { \
+                ::boost::php::utils::print_error(E_WARNING, \
                         e.filename().c_str(), e.line_number(), e.what()); \
             } catch (const ::std::exception& e) { \
                 zend_error(E_WARNING, "%s", e.what()); \
@@ -176,6 +176,6 @@ inline native_fun_proxy_base* create_native_fun_proxy(const Tsig_& sig)
     return create_native_fun_proxy(sig, get_object_retriever(sig));
 }
 
-} } } // namespace mozo::php::detail
+} } } // namespace boost::php::detail
 
 #endif /* MOZO_PHP_DETAIL_NATIVE_FUN_PROXY_HPP */

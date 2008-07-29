@@ -32,7 +32,7 @@
 
 #ifndef MOZO_PHP_OBJECT_DEFINED
 #define MOZO_PHP_OBJECT_DEFINED
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class object: public ::zend_object {
 public:
@@ -56,7 +56,7 @@ public:
 
 #ifndef MOZO_PHP_OBJECT_MEMBER_DEFINED
 #define MOZO_PHP_OBJECT_MEMBER_DEFINED
-namespace mozo { namespace php {
+namespace boost { namespace php {
 #if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 1 && PHP_RELEASE_VERSION > 2) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 1) || (PHP_MAJOR_VERSION > 5)
 #ifdef ZTS
 inline object::object(::zend_class_entry const& _ce TSRMLS_DC)
@@ -123,19 +123,19 @@ inline object::~object()
     }
 }
 #endif /* (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 1 && PHP_RELEASE_VERSION > 2) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 1) || (PHP_MAJOR_VERSION > 5) */
-} } // namespace mozo::php
+} } // namespace boost::php
 #endif /* MOZO_PHP_OBJECT_MEMBER_DEFINED */
 
 #ifndef MOZO_PHP_SENSIBLE_OBJECT_DEFINED
 #define MOZO_PHP_SENSIBLE_OBJECT_DEFINED
-namespace mozo { namespace php {
+namespace boost { namespace php {
 class sensible_object;
-} } // namespace mozo::php
+} } // namespace boost::php
 
-void intrusive_ptr_add_ref(::mozo::php::sensible_object*);
-void intrusive_ptr_del_ref(::mozo::php::sensible_object*);
+void intrusive_ptr_add_ref(::boost::php::sensible_object*);
+void intrusive_ptr_del_ref(::boost::php::sensible_object*);
 
-namespace mozo { namespace php {
+namespace boost { namespace php {
 
 class sensible_object: public object
 {
@@ -174,12 +174,12 @@ public:
 
 } }
 
-inline void intrusive_ptr_add_ref(::mozo::php::sensible_object* p)
+inline void intrusive_ptr_add_ref(::boost::php::sensible_object* p)
 {
     p->add_ref();
 }
 
-inline void intrusive_ptr_del_ref(::mozo::php::sensible_object* p)
+inline void intrusive_ptr_del_ref(::boost::php::sensible_object* p)
 {
     p->release();
 }
