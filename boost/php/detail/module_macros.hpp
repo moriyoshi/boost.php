@@ -81,7 +81,7 @@ extern "C" { \
         ZEND_RSHUTDOWN(__mod_name__), \
         ZEND_MINFO(__mod_name__), \
         const_cast<char*>(__version__), \
-        sizeof(BOOST_PHP_MODULE_CLASS(__mod_name__)), \
+        sizeof(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)), \
         &BOOST_PHP_TSRM_ID_VAR(__mod_name__), \
         NULL, \
         NULL, \
@@ -105,6 +105,7 @@ extern "C" { \
                 (ts_allocate_ctor)&BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__),\
                 (ts_allocate_dtor)&BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__));\
         try { \
+            BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, initializers); \
             BOOST_PHP_MODULE_SLOT(__mod_name__)->__initialize(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
@@ -118,6 +119,7 @@ extern "C" { \
         ts_free_id(BOOST_PHP_TSRM_ID_VAR(__mod_name__)); \
         try { \
             BOOST_PHP_MODULE_SLOT(__mod_name__)->__finalize(TSRMLS_C); \
+            BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, finalizers); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
         } \
@@ -227,11 +229,13 @@ extern "C" { \
 
 #define BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, __kind__) \
     BOOST_PHP_MODULE_EACH_HOOK( \
-            ::boost::php::detail::module_hooks::__kind__##_type, \
-            BOOST_PHP_MODULE_HOOKS(__mod_name__).__kind__, _())
+            ::boost::php::detail::module_hooks< \
+                BOOST_PHP_MODULE_CLASS(__mod_name__) >::__kind__##_type, \
+            BOOST_PHP_MODULE_HOOKS(__mod_name__)::singleton.__kind__, \
+            (*_)(*BOOST_PHP_MODULE_SLOT(__mod_name__)))
 
 #define BOOST_PHP_MODULE_EACH_HOOK(__type__, __list__, __action__) \
-    for (__type__* _ = __list__.first; _; _ = _->next) { __action__ }
+    for (__type__::element_type* _ = __list__.first; _; _ = _->next) { __action__; }
 
 #define BOOST_PHP_MODULE_HOOKS(__mod_name__) \
     ::boost::php::detail::module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >
@@ -240,7 +244,7 @@ extern "C" { \
     namespace boost { namespace php { namespace detail { \
     template<> \
     module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) > \
-    module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >::singleton; \
+    module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >::singleton = module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >(); \
     } } }
 
 #define BOOST_PHP_USE_MODULE_SLOT(__mod_name__, __mod_klass__) \

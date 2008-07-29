@@ -33,12 +33,13 @@ namespace boost { namespace php { namespace detail {
 template<typename T_>
 struct hook_list
 {
-    T_* first;
-    T_* last;
+    typedef T_ element_type;
+    element_type* first;
+    element_type* last;
 
     hook_list(): first(0), last(0) {}
 
-    void append(T_* item) {
+    void append(element_type* item) {
         if (!first) {
             first = item;
         }
@@ -54,12 +55,12 @@ template<typename Tmod_>
 struct module_hooks
 {
     struct initializer {
-        virtual void operator()(Tmod_& mod) = 0;
+        virtual void operator()(typename Tmod_::handler& mod) = 0;
         initializer* next;
     };
 
     struct finalizer {
-        virtual void operator()(Tmod_& mod) = 0;
+        virtual void operator()(typename Tmod_::handler& mod) = 0;
         finalizer* next;
     };
 
