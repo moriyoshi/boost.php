@@ -43,7 +43,7 @@
 namespace boost { namespace php {
 
 namespace detail {
-    class module_dependency_base: public zend_module_dep {
+    class module_dependency_base {
     public:
         module_dependency_base(const char* _name, int _type)
             : next_(0) {
@@ -98,15 +98,15 @@ namespace detail {
             return *this;
         }
 
-        operator const zend_module_dep&() const {
+        operator const ::zend_module_dep&() const {
             return wrapped_;
         }
 
-        operator zend_module_dep&() {
+        operator ::zend_module_dep&() {
             return wrapped_;
         }
 
-        operator zend_module_dep*() {
+        operator ::zend_module_dep*() {
             return realize();
         }
 
@@ -120,7 +120,7 @@ namespace detail {
             return retval;
         }
 
-        zend_module_dep* realize() {
+        ::zend_module_dep* realize() {
             ::std::size_t n = count();
             zend_module_dep* realized = new zend_module_dep[n + 1];
             module_dependency_base* current = this;
@@ -132,9 +132,9 @@ namespace detail {
         }
 
     private:
-        zend_module_dep wrapped_;
+        ::zend_module_dep wrapped_;
         module_dependency_base* next_;
-        zend_module_dep* realized_;
+        ::zend_module_dep* realized_;
     };
 
     template<int _type>
@@ -157,7 +157,7 @@ namespace detail {
     };
 } // namespace detail
 
-class module: public zend_module_entry {
+class module {
 public:
     typedef detail::module_dependency<MODULE_DEP_REQUIRED> requires;
     typedef detail::module_dependency<MODULE_DEP_CONFLICTS> conflicts;

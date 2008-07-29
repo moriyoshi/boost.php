@@ -232,7 +232,7 @@ extern "C" { \
             ::boost::php::detail::module_hooks< \
                 BOOST_PHP_MODULE_CLASS(__mod_name__) >::__kind__##_type, \
             BOOST_PHP_MODULE_HOOKS(__mod_name__)::singleton.__kind__, \
-            (*_)(*BOOST_PHP_MODULE_SLOT(__mod_name__)))
+            (*_)(*BOOST_PHP_MODULE_SLOT(__mod_name__) TSRMLS_CC))
 
 #define BOOST_PHP_MODULE_EACH_HOOK(__type__, __list__, __action__) \
     for (__type__::element_type* _ = __list__.first; _; _ = _->next) { __action__; }

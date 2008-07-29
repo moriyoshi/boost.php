@@ -28,6 +28,8 @@
 #ifndef BOOST_PHP_MODULE_HOOKS_HPP
 #define BOOST_PHP_MODULE_HOOKS_HPP
 
+#include <TSRM.h>
+
 namespace boost { namespace php { namespace detail {
 
 template<typename T_>
@@ -55,12 +57,12 @@ template<typename Tmod_>
 struct module_hooks
 {
     struct initializer {
-        virtual void operator()(typename Tmod_::handler& mod) = 0;
+        virtual void operator()(typename Tmod_::handler& mod TSRMLS_DC) = 0;
         initializer* next;
     };
 
     struct finalizer {
-        virtual void operator()(typename Tmod_::handler& mod) = 0;
+        virtual void operator()(typename Tmod_::handler& mod TSRMLS_DC) = 0;
         finalizer* next;
     };
 
