@@ -78,6 +78,11 @@ struct signature {
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
             BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__)))
 
+#define __BOOST_PHP_SIGNATURE_FUN_TYPE_CM(__z__, __arity__, __arg_and_name__) \
+    Tretval_(Tobj_::*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
+        BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
+            BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__))) const
+
 #define __BOOST_PHP_SIGNATURE_FUN_TYPE_F(__z__, __arity__, __arg_and_name__) \
     Tretval_(*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
@@ -87,6 +92,13 @@ struct signature {
     signature< unbound_function< \
         BOOST_PP_TUPLE_ELEM(3, 0, __retval_obj_and_args__), \
         BOOST_PP_TUPLE_ELEM(3, 1, __retval_obj_and_args__), \
+        __BOOST_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
+                BOOST_PP_TUPLE_ELEM(3, 2, __retval_obj_and_args__))>  >
+
+#define __BOOST_PHP_SIGNATURE_TYPE_CM(__z__, __arity__, __retval_obj_and_args__) \
+    signature< unbound_function< \
+        BOOST_PP_TUPLE_ELEM(3, 0, __retval_obj_and_args__), \
+        const BOOST_PP_TUPLE_ELEM(3, 1, __retval_obj_and_args__), \
         __BOOST_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
                 BOOST_PP_TUPLE_ELEM(3, 2, __retval_obj_and_args__))>  >
 
@@ -109,6 +121,18 @@ struct signature {
         return __BOOST_PHP_SIGNATURE_TYPE_M(__z__, __arity__, (Tretval_, Tobj_, Targ))(fun); \
     }
 
+#define __BOOST_PHP_SIGNATURE_TPL_CM(__z__, __arity__, __var__) \
+    template< \
+        typename Tretval_, \
+        typename Tobj_ \
+        BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ) \
+    > \
+    __BOOST_PHP_SIGNATURE_TYPE_CM(__z__,__arity__, (Tretval_, Tobj_, Targ)) \
+    get_signature(__BOOST_PHP_SIGNATURE_FUN_TYPE_CM(__z__, __arity__, (Targ, fun))) \
+    { \
+        return __BOOST_PHP_SIGNATURE_TYPE_CM(__z__, __arity__, (Tretval_, Tobj_, Targ))(fun); \
+    }
+
 #define __BOOST_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__) \
     template< \
         typename Tretval_ \
@@ -122,6 +146,7 @@ struct signature {
 
 #define __BOOST_PHP_SIGNATURE_TPL(__z__, __arity__, __var__) \
     __BOOST_PHP_SIGNATURE_TPL_M(__z__, __arity__, __var__) \
+    __BOOST_PHP_SIGNATURE_TPL_CM(__z__, __arity__, __var__) \
     __BOOST_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__)
 
 BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_SIGNATURE_TPL, _);
