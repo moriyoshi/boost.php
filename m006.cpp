@@ -21,28 +21,28 @@ public:
                           fclose("fclose");
             php::value_ptr $fp, $retval;
 
-            MOZO_PHP_BEGIN_CAPTURE_ERROR
+            BOOST_PHP_BEGIN_CAPTURE_ERROR
                 $fp = fopen(filename, "rb");
                 if (*$fp == false) {
                     throw php::runtime_error(
                         std::string("Failure in system function: \"")
-                        + MOZO_PHP_LAST_ERROR.message() + "\"",
-                        MOZO_PHP_LAST_ERROR.filename().c_str(),
-                        MOZO_PHP_LAST_ERROR.line_number());
+                        + BOOST_PHP_LAST_ERROR.message() + "\"",
+                        BOOST_PHP_LAST_ERROR.filename().c_str(),
+                        BOOST_PHP_LAST_ERROR.line_number());
                 }
-            MOZO_PHP_END_CAPTURE_ERROR
+            BOOST_PHP_END_CAPTURE_ERROR
 
             try {
-                MOZO_PHP_BEGIN_CAPTURE_ERROR
+                BOOST_PHP_BEGIN_CAPTURE_ERROR
                     $retval = fread($fp, filesize(filename));
                     if (*$retval == false) {
                         throw php::runtime_error(
                             std::string("Failure in system function: \"")
-                            + MOZO_PHP_LAST_ERROR.message() + "\"",
-                            MOZO_PHP_LAST_ERROR.filename().c_str(),
-                            MOZO_PHP_LAST_ERROR.line_number());
+                            + BOOST_PHP_LAST_ERROR.message() + "\"",
+                            BOOST_PHP_LAST_ERROR.filename().c_str(),
+                            BOOST_PHP_LAST_ERROR.line_number());
                     }
-                MOZO_PHP_END_CAPTURE_ERROR
+                BOOST_PHP_END_CAPTURE_ERROR
             } catch (const ::std::exception&) {
                 fclose($fp);
                 throw;
@@ -62,9 +62,9 @@ public:
     }
 };
 
-#define MOZO_PHP_MODULE_NAME m006
-#define MOZO_PHP_MODULE_CAPITALIZED_NAME M006
-#define MOZO_PHP_MODULE_VERSION "0.1"
-#define MOZO_PHP_MODULE_CLASS_NAME m006_module
+#define BOOST_PHP_MODULE_NAME m006
+#define BOOST_PHP_MODULE_CAPITALIZED_NAME M006
+#define BOOST_PHP_MODULE_VERSION "0.1"
+#define BOOST_PHP_MODULE_CLASS_NAME m006_module
 
 #include "boost/php/module_def.hpp"

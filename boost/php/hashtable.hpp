@@ -38,8 +38,8 @@
 #include <zend_variables.h>
 #include <boost/php/detail/value_helpers.hpp>
 
-#ifndef MOZO_PHP_HASHTABLE_KEY_DEFINED
-#define MOZO_PHP_HASHTABLE_KEY_DEFINED
+#ifndef BOOST_PHP_HASHTABLE_KEY_DEFINED
+#define BOOST_PHP_HASHTABLE_KEY_DEFINED
 
 namespace boost { namespace php {
 
@@ -66,10 +66,10 @@ public:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_HASHTABLE_KEY_DEFINED */
+#endif /* BOOST_PHP_HASHTABLE_KEY_DEFINED */
 
-#ifndef MOZO_PHP_SYMTABLE_KEY_DEFINED
-#define MOZO_PHP_SYMTABLE_KEY_DEFINED
+#ifndef BOOST_PHP_SYMTABLE_KEY_DEFINED
+#define BOOST_PHP_SYMTABLE_KEY_DEFINED
 
 namespace boost { namespace php {
 
@@ -111,10 +111,10 @@ private:
 
 } } //namespace boost::php
 
-#endif /* MOZO_PHP_SYMTABLE_KEY_DEFINED */
+#endif /* BOOST_PHP_SYMTABLE_KEY_DEFINED */
 
-#ifndef MOZO_PHP_HASHTABLE_DEFINED
-#define MOZO_PHP_HASHTABLE_DEFINED
+#ifndef BOOST_PHP_HASHTABLE_DEFINED
+#define BOOST_PHP_HASHTABLE_DEFINED
 
 namespace boost { namespace php {
 
@@ -399,12 +399,12 @@ public:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_HASHTABLE_DEFINED */
+#endif /* BOOST_PHP_HASHTABLE_DEFINED */
 
 #include <boost/php/exceptions.hpp>
 
-#ifndef MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
-#define MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
+#ifndef BOOST_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
+#define BOOST_PHP_HASHTABLE_KEY_MEMBERS_DEFINED
 
 namespace boost { namespace php {
 
@@ -433,10 +433,10 @@ inline hashtable_key::hashtable_key(const char* str, ::std::size_t str_len)
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */
+#endif /* BOOST_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */
 
-#ifndef MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
-#define MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
+#ifndef BOOST_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
+#define BOOST_PHP_SYMTABLE_KEY_MEMBERS_DEFINED
 
 namespace boost { namespace php {
 
@@ -457,10 +457,10 @@ inline void symtable_key::init(const char* str, ::uint str_len)
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_SYMTABLE_KEY_MEMBERS_DEFINED */
+#endif /* BOOST_PHP_SYMTABLE_KEY_MEMBERS_DEFINED */
 
-#ifndef MOZO_PHP_HASHTABLE_MEMBERS_DEFINED
-#define MOZO_PHP_HASHTABLE_MEMBERS_DEFINED
+#ifndef BOOST_PHP_HASHTABLE_MEMBERS_DEFINED
+#define BOOST_PHP_HASHTABLE_MEMBERS_DEFINED
 
 namespace boost { namespace php {
 
@@ -513,4 +513,4 @@ hashtable<Telem_, Tkey_>::operator[](const key_type& k) const
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */
+#endif /* BOOST_PHP_HASHTABLE_KEY_MEMBERS_DEFINED */

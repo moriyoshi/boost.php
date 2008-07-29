@@ -28,8 +28,8 @@
 // heavily inspired by get_signature() of Boost.Python, which is the
 // really excellent work.
 
-#ifndef MOZO_PHP_DETAIL_SIGNATURE_HPP
-#define MOZO_PHP_DETAIL_SIGNATURE_HPP
+#ifndef BOOST_PHP_DETAIL_SIGNATURE_HPP
+#define BOOST_PHP_DETAIL_SIGNATURE_HPP
 
 #include <cstddef>
 #include <boost/mpl/vector.hpp>
@@ -67,75 +67,75 @@ struct signature {
     function_type impl;
 };
 
-#define __MOZO_PHP_MPL_VECTOR_N(__arity__) \
+#define __BOOST_PHP_MPL_VECTOR_N(__arity__) \
     BOOST_PP_CAT(::boost::mpl::vector, __arity__)
 
-#define __MOZO_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, __var__) \
-    __MOZO_PHP_MPL_VECTOR_N(__arity__)< BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, __var__) >
+#define __BOOST_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, __var__) \
+    __BOOST_PHP_MPL_VECTOR_N(__arity__)< BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, __var__) >
 
-#define __MOZO_PHP_SIGNATURE_FUN_TYPE_M(__z__, __arity__, __arg_and_name__) \
+#define __BOOST_PHP_SIGNATURE_FUN_TYPE_M(__z__, __arity__, __arg_and_name__) \
     Tretval_(Tobj_::*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
             BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__)))
 
-#define __MOZO_PHP_SIGNATURE_FUN_TYPE_F(__z__, __arity__, __arg_and_name__) \
+#define __BOOST_PHP_SIGNATURE_FUN_TYPE_F(__z__, __arity__, __arg_and_name__) \
     Tretval_(*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
             BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__)))
 
-#define __MOZO_PHP_SIGNATURE_TYPE_M(__z__, __arity__, __retval_obj_and_args__) \
+#define __BOOST_PHP_SIGNATURE_TYPE_M(__z__, __arity__, __retval_obj_and_args__) \
     signature< unbound_function< \
         BOOST_PP_TUPLE_ELEM(3, 0, __retval_obj_and_args__), \
         BOOST_PP_TUPLE_ELEM(3, 1, __retval_obj_and_args__), \
-        __MOZO_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
+        __BOOST_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
                 BOOST_PP_TUPLE_ELEM(3, 2, __retval_obj_and_args__))>  >
 
-#define __MOZO_PHP_SIGNATURE_TYPE_F(__z__, __arity__, __retval_and_args__) \
+#define __BOOST_PHP_SIGNATURE_TYPE_F(__z__, __arity__, __retval_and_args__) \
     signature< \
         unbound_function< \
             BOOST_PP_TUPLE_ELEM(2, 0, __retval_and_args__ ), void, \
-            __MOZO_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
+            __BOOST_PHP_SIGNATURE_VECTOR_TPL(__z__, __arity__, \
                     BOOST_PP_TUPLE_ELEM(2, 1, __retval_and_args__))> >
 
-#define __MOZO_PHP_SIGNATURE_TPL_M(__z__, __arity__, __var__) \
+#define __BOOST_PHP_SIGNATURE_TPL_M(__z__, __arity__, __var__) \
     template< \
         typename Tretval_, \
         typename Tobj_ \
         BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ) \
     > \
-    __MOZO_PHP_SIGNATURE_TYPE_M(__z__,__arity__, (Tretval_, Tobj_, Targ)) \
-    get_signature(__MOZO_PHP_SIGNATURE_FUN_TYPE_M(__z__, __arity__, (Targ, fun))) \
+    __BOOST_PHP_SIGNATURE_TYPE_M(__z__,__arity__, (Tretval_, Tobj_, Targ)) \
+    get_signature(__BOOST_PHP_SIGNATURE_FUN_TYPE_M(__z__, __arity__, (Targ, fun))) \
     { \
-        return __MOZO_PHP_SIGNATURE_TYPE_M(__z__, __arity__, (Tretval_, Tobj_, Targ))(fun); \
+        return __BOOST_PHP_SIGNATURE_TYPE_M(__z__, __arity__, (Tretval_, Tobj_, Targ))(fun); \
     }
 
-#define __MOZO_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__) \
+#define __BOOST_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__) \
     template< \
         typename Tretval_ \
         BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ) \
     > \
-    __MOZO_PHP_SIGNATURE_TYPE_F(__z__,__arity__, (Tretval_, Targ)) \
-    get_signature(__MOZO_PHP_SIGNATURE_FUN_TYPE_F(__z__, __arity__, (Targ, fun))) \
+    __BOOST_PHP_SIGNATURE_TYPE_F(__z__,__arity__, (Tretval_, Targ)) \
+    get_signature(__BOOST_PHP_SIGNATURE_FUN_TYPE_F(__z__, __arity__, (Targ, fun))) \
     { \
-        return __MOZO_PHP_SIGNATURE_TYPE_F(__z__, __arity__, (Tretval_, Targ))(fun); \
+        return __BOOST_PHP_SIGNATURE_TYPE_F(__z__, __arity__, (Tretval_, Targ))(fun); \
     }
 
-#define __MOZO_PHP_SIGNATURE_TPL(__z__, __arity__, __var__) \
-    __MOZO_PHP_SIGNATURE_TPL_M(__z__, __arity__, __var__) \
-    __MOZO_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__)
+#define __BOOST_PHP_SIGNATURE_TPL(__z__, __arity__, __var__) \
+    __BOOST_PHP_SIGNATURE_TPL_M(__z__, __arity__, __var__) \
+    __BOOST_PHP_SIGNATURE_TPL_F(__z__, __arity__, __var__)
 
-BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_SIGNATURE_TPL, _);
+BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_SIGNATURE_TPL, _);
 
-#undef __MOZO_PHP_MPL_VECTOR_N
-#undef __MOZO_PHP_SIGNATURE_VECTOR_TPL
-#undef __MOZO_PHP_SIGNATURE_FUN_TYPE_F
-#undef __MOZO_PHP_SIGNATURE_FUN_TYPE_M
-#undef __MOZO_PHP_SIGNATURE_TYPE_M
-#undef __MOZO_PHP_SIGNATURE_TYPE_F
-#undef __MOZO_PHP_SIGNATURE_TPL_M
-#undef __MOZO_PHP_SIGNATURE_TPL_F
-#undef __MOZO_PHP_SIGNATURE_TPL
+#undef __BOOST_PHP_MPL_VECTOR_N
+#undef __BOOST_PHP_SIGNATURE_VECTOR_TPL
+#undef __BOOST_PHP_SIGNATURE_FUN_TYPE_F
+#undef __BOOST_PHP_SIGNATURE_FUN_TYPE_M
+#undef __BOOST_PHP_SIGNATURE_TYPE_M
+#undef __BOOST_PHP_SIGNATURE_TYPE_F
+#undef __BOOST_PHP_SIGNATURE_TPL_M
+#undef __BOOST_PHP_SIGNATURE_TPL_F
+#undef __BOOST_PHP_SIGNATURE_TPL
 
 } } } // namespace boost::php::detail
 
-#endif /* MOZO_PHP_DETAIL_SIGNATURE_HPP */
+#endif /* BOOST_PHP_DETAIL_SIGNATURE_HPP */

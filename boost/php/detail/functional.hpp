@@ -28,8 +28,8 @@
 // heavily inspired by get_signature() of Boost.Python, which is the
 // really excellent work.
 
-#ifndef MOZO_PHP_DETAIL_FUNCTIONAL_HPP
-#define MOZO_PHP_DETAIL_FUNCTIONAL_HPP
+#ifndef BOOST_PHP_DETAIL_FUNCTIONAL_HPP
+#define BOOST_PHP_DETAIL_FUNCTIONAL_HPP
 
 #include <cstddef>
 #include <boost/mpl/vector.hpp>
@@ -48,32 +48,32 @@ namespace boost { namespace php { namespace detail {
 
 struct constructor_mark {};
 
-#define __MOZO_PHP_MPL_VECTOR_N(__arity__) \
+#define __BOOST_PHP_MPL_VECTOR_N(__arity__) \
     BOOST_PP_CAT(::boost::mpl::vector, __arity__)
 
-#define __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, __var__) \
-    __MOZO_PHP_MPL_VECTOR_N(__arity__)< BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, __var__) >
+#define __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, __var__) \
+    __BOOST_PHP_MPL_VECTOR_N(__arity__)< BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, __var__) >
 
-#define __MOZO_PHP_FUNCTIONAL_FUN_TYPE_M(__z__, __arity__, __arg_and_name__) \
+#define __BOOST_PHP_FUNCTIONAL_FUN_TYPE_M(__z__, __arity__, __arg_and_name__) \
     Tretval_(Tobj_::*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
             BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__)))
 
-#define __MOZO_PHP_FUNCTIONAL_FUN_TYPE_F(__z__, __arity__, __arg_and_name__) \
+#define __BOOST_PHP_FUNCTIONAL_FUN_TYPE_F(__z__, __arity__, __arg_and_name__) \
     Tretval_(*BOOST_PP_TUPLE_ELEM(2, 1, __arg_and_name__))( \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, \
             BOOST_PP_TUPLE_ELEM(2, 0, __arg_and_name__)))
 
-#define __MOZO_PHP_FUNCTIONAL_TPL_M(__z__, __arity__, __var__) \
+#define __BOOST_PHP_FUNCTIONAL_TPL_M(__z__, __arity__, __var__) \
     template<typename Tretval_, typename Tobj_ \
              BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ) > \
     struct unbound_function<Tretval_, Tobj_, \
-            __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
+            __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
         typedef Tretval_ result_type; \
         typedef Tobj_ object_type; \
-        typedef __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
+        typedef __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
                 arguments; \
-        typedef __MOZO_PHP_FUNCTIONAL_FUN_TYPE_M(__z__, __arity__, (Targ, impl_ptr_type)); \
+        typedef __BOOST_PHP_FUNCTIONAL_FUN_TYPE_M(__z__, __arity__, (Targ, impl_ptr_type)); \
         unbound_function(impl_ptr_type _impl): impl(_impl) {} \
         Tretval_ operator()(Tobj_* obj BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(__z__, __arity__, Targ, arg)) { \
             return (obj->*impl)(BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, arg)); \
@@ -81,14 +81,14 @@ struct constructor_mark {};
         impl_ptr_type impl; \
     };
 
-#define __MOZO_PHP_FUNCTIONAL_TPL_C(__z__, __arity__, __var__) \
+#define __BOOST_PHP_FUNCTIONAL_TPL_C(__z__, __arity__, __var__) \
     template<typename Tobj_ \
              BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ) > \
     struct unbound_function<constructor_mark, Tobj_, \
-            __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
+            __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
         typedef void result_type; \
         typedef Tobj_ object_type; \
-        typedef __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
+        typedef __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
                 arguments; \
         unbound_function() {} \
         void operator()(void* obj BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(__z__, __arity__, Targ, arg)) { \
@@ -96,16 +96,16 @@ struct constructor_mark {};
         } \
     };
 
-#define __MOZO_PHP_FUNCTIONAL_TPL_F(__z__, __arity__, __var__) \
+#define __BOOST_PHP_FUNCTIONAL_TPL_F(__z__, __arity__, __var__) \
     template<typename Tretval_ \
              BOOST_PP_ENUM_TRAILING_PARAMS_Z(__z__, __arity__, typename Targ)> \
     struct unbound_function<Tretval_, void, \
-            __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
+            __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ)> { \
         typedef Tretval_ result_type; \
         typedef void object_type; \
-        typedef __MOZO_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
+        typedef __BOOST_PHP_FUNCTIONAL_VECTOR_TPL(__z__, __arity__, Targ) \
                 arguments; \
-        typedef __MOZO_PHP_FUNCTIONAL_FUN_TYPE_F(__z__, __arity__, (Targ, impl_ptr_type)); \
+        typedef __BOOST_PHP_FUNCTIONAL_FUN_TYPE_F(__z__, __arity__, (Targ, impl_ptr_type)); \
         unbound_function(impl_ptr_type _impl): impl(_impl) {} \
         Tretval_ operator()(void* BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(__z__, __arity__, Targ, arg)) { \
             return impl(BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, arg)); \
@@ -113,25 +113,25 @@ struct constructor_mark {};
         impl_ptr_type impl; \
     };
 
-#define __MOZO_PHP_FUNCTIONAL_TPL(__z__, __arity__, __var__) \
-    __MOZO_PHP_FUNCTIONAL_TPL_M(__z__, __arity__, __var__) \
-    __MOZO_PHP_FUNCTIONAL_TPL_C(__z__, __arity__, __var__) \
-    __MOZO_PHP_FUNCTIONAL_TPL_F(__z__, __arity__, __var__)
+#define __BOOST_PHP_FUNCTIONAL_TPL(__z__, __arity__, __var__) \
+    __BOOST_PHP_FUNCTIONAL_TPL_M(__z__, __arity__, __var__) \
+    __BOOST_PHP_FUNCTIONAL_TPL_C(__z__, __arity__, __var__) \
+    __BOOST_PHP_FUNCTIONAL_TPL_F(__z__, __arity__, __var__)
 
 template<typename Tretval_, typename Tobj_, typename Targs_>
 struct unbound_function {};
 
-BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_FUNCTIONAL_TPL, _);
+BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_FUNCTIONAL_TPL, _);
 
-#undef __MOZO_PHP_MPL_VECTOR_N
-#undef __MOZO_PHP_FUNCTIONAL_VECTOR_TPL
-#undef __MOZO_PHP_FUNCTIONAL_FUN_TYPE_F
-#undef __MOZO_PHP_FUNCTIONAL_FUN_TYPE_M
-#undef __MOZO_PHP_FUNCTIONAL_TPL_M
-#undef __MOZO_PHP_FUNCTIONAL_TPL_C
-#undef __MOZO_PHP_FUNCTIONAL_TPL_F
-#undef __MOZO_PHP_FUNCTIONAL_TPL
+#undef __BOOST_PHP_MPL_VECTOR_N
+#undef __BOOST_PHP_FUNCTIONAL_VECTOR_TPL
+#undef __BOOST_PHP_FUNCTIONAL_FUN_TYPE_F
+#undef __BOOST_PHP_FUNCTIONAL_FUN_TYPE_M
+#undef __BOOST_PHP_FUNCTIONAL_TPL_M
+#undef __BOOST_PHP_FUNCTIONAL_TPL_C
+#undef __BOOST_PHP_FUNCTIONAL_TPL_F
+#undef __BOOST_PHP_FUNCTIONAL_TPL
 
 } } } // namespace boost::php::detail
 
-#endif /* MOZO_PHP_DETAIL_FUNCTIONAL_HPP */
+#endif /* BOOST_PHP_DETAIL_FUNCTIONAL_HPP */

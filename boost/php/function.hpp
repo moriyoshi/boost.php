@@ -25,11 +25,11 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_FUNCTION_HPP
-#define MOZO_PHP_FUNCTION_HPP
+#ifndef BOOST_PHP_FUNCTION_HPP
+#define BOOST_PHP_FUNCTION_HPP
 
 #include <zend.h>
 #include <boost/php/detail/function_template.hpp>
 #include <boost/php/detail/function_container.hpp>
 
-#endif /* MOZO_PHP_FUNCTION_HPP */
+#endif /* BOOST_PHP_FUNCTION_HPP */

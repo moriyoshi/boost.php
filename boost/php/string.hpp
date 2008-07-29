@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_STRING_HPP
-#define MOZO_PHP_STRING_HPP
+#ifndef BOOST_PHP_STRING_HPP
+#define BOOST_PHP_STRING_HPP
 
 #include <cstddef>
 #include <cstring>
@@ -130,4 +130,4 @@ private:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_STRING_HPP */
+#endif /* BOOST_PHP_STRING_HPP */

@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_ERROR_HPP
-#define MOZO_PHP_ERROR_HPP
+#ifndef BOOST_PHP_ERROR_HPP
+#define BOOST_PHP_ERROR_HPP
 
 #include <cstdarg>
 #include <string>
@@ -143,14 +143,14 @@ namespace detail {
 
 } } // namespace boost::php
 
-#define MOZO_PHP_BEGIN_CAPTURE_ERROR \
+#define BOOST_PHP_BEGIN_CAPTURE_ERROR \
     { \
         ::boost::php::detail::error_captor __mozo_php_error_cap;
 
-#define MOZO_PHP_END_CAPTURE_ERROR \
+#define BOOST_PHP_END_CAPTURE_ERROR \
     }
 
-#define MOZO_PHP_LAST_ERROR __mozo_php_error_cap.captured()
+#define BOOST_PHP_LAST_ERROR __mozo_php_error_cap.captured()
 
 #undef slprintf
 #undef vslprintf
@@ -158,4 +158,4 @@ namespace detail {
 #undef vsnprintf
 #undef sprintf
 
-#endif /* MOZO_PHP_ERROR_HPP */
+#endif /* BOOST_PHP_ERROR_HPP */

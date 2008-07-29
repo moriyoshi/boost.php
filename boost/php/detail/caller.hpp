@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_DETAIL_CALLER_HPP
-#define MOZO_PHP_DETAIL_CALLER_HPP
+#ifndef BOOST_PHP_DETAIL_CALLER_HPP
+#define BOOST_PHP_DETAIL_CALLER_HPP
 
 #include <cstddef>
 #include <boost/mpl/vector.hpp>
@@ -57,20 +57,20 @@ public:
     caller(typename Tsig_::function_type) {}
 };
 
-#define __MOZO_PHP_CALLER_CONV_TPL(__z__, __idx__, __var__) \
+#define __BOOST_PHP_CALLER_CONV_TPL(__z__, __idx__, __var__) \
     BOOST_PP_COMMA_IF(__idx__) \
     to_native< typename ::boost::mpl::at<typename Tsig_::arguments, typename ::boost::mpl::int_<__idx__> >::type >(to_value_ptr(*params[__idx__]))
 
-#define __MOZO_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__) \
-    fun_(BOOST_PP_REPEAT_##__z__(__arity__, __MOZO_PHP_CALLER_CONV_TPL, _)) \
+#define __BOOST_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__) \
+    fun_(BOOST_PP_REPEAT_##__z__(__arity__, __BOOST_PHP_CALLER_CONV_TPL, _)) \
 
-#define __MOZO_PHP_CALLER_VOID_INVOCATION_TPL(__z__, __arity__, __var__) \
-    __MOZO_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__);
+#define __BOOST_PHP_CALLER_VOID_INVOCATION_TPL(__z__, __arity__, __var__) \
+    __BOOST_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__);
 
-#define __MOZO_PHP_CALLER_NONVOID_INVOCATION_TPL(__z__, __arity__, __var__) \
-    new(return_value) value(__MOZO_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__));
+#define __BOOST_PHP_CALLER_NONVOID_INVOCATION_TPL(__z__, __arity__, __var__) \
+    new(return_value) value(__BOOST_PHP_CALLER_INVOCATION_TPL(__z__, __arity__, __var__));
 
-#define __MOZO_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
+#define __BOOST_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
     public: \
         caller(typename Tsig_::function_type fun): fun_(fun) {} \
         virtual ~caller() {} \
@@ -92,26 +92,26 @@ public:
     public: \
         typename Tsig_::function_type fun_; \
 
-#define __MOZO_PHP_CALLER_TPL(__z__, __arity__, __var__) \
+#define __BOOST_PHP_CALLER_TPL(__z__, __arity__, __var__) \
     template<typename Tsig_, typename Tretval_> \
     class caller<Tsig_, Tretval_, __arity__>: public caller_base { \
-    __MOZO_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, \
-            __MOZO_PHP_CALLER_NONVOID_INVOCATION_TPL) \
+    __BOOST_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, \
+            __BOOST_PHP_CALLER_NONVOID_INVOCATION_TPL) \
     }; \
     template<typename Tsig_> \
     class caller<Tsig_, void, __arity__>: public caller_base { \
-    __MOZO_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, \
-            __MOZO_PHP_CALLER_VOID_INVOCATION_TPL) \
+    __BOOST_PHP_CALLER_BODY_TPL(__z__, __arity__, __var__, \
+            __BOOST_PHP_CALLER_VOID_INVOCATION_TPL) \
     };
 
-BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_CALLER_TPL, _);
+BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_CALLER_TPL, _);
 
-#undef __MOZO_PHP_CALLER_CONV_TPL
-#undef __MOZO_PHP_CALLER_BODY_TPL
-#undef __MOZO_PHP_CALLER_TPL
-#undef __MOZO_PHP_CALLER_INVOCATION_TPL
-#undef __MOZO_PHP_CALLER_NONVOID_INVOCATION_TPL
-#undef __MOZO_PHP_CALLER_VOID_INVOCATION_TPL
+#undef __BOOST_PHP_CALLER_CONV_TPL
+#undef __BOOST_PHP_CALLER_BODY_TPL
+#undef __BOOST_PHP_CALLER_TPL
+#undef __BOOST_PHP_CALLER_INVOCATION_TPL
+#undef __BOOST_PHP_CALLER_NONVOID_INVOCATION_TPL
+#undef __BOOST_PHP_CALLER_VOID_INVOCATION_TPL
 
 template<typename Tsig_>
 inline caller_base* create_caller(const Tsig_& sig)
@@ -121,4 +121,4 @@ inline caller_base* create_caller(const Tsig_& sig)
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_DETAIL_CALLER_HPP */
+#endif /* BOOST_PHP_DETAIL_CALLER_HPP */

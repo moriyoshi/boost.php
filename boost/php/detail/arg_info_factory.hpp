@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_DETAIL_ARG_INFO_FACTORY_HPP
-#define MOZO_PHP_DETAIL_ARG_INFO_FACTORY_HPP
+#ifndef BOOST_PHP_DETAIL_ARG_INFO_FACTORY_HPP
+#define BOOST_PHP_DETAIL_ARG_INFO_FACTORY_HPP
 
 #include <cstddef>
 #include <boost/mpl/vector.hpp>
@@ -97,25 +97,25 @@ struct concrete_arg_info_enclosure {
     struct arg_info {};
 };
 
-#define __MOZO_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE(__z__, __idx__, __var__) \
+#define __BOOST_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE(__z__, __idx__, __var__) \
     concrete_arg_info_entry<\
             typename ::boost::mpl::at<typename Tsig_::arguments, \
                 ::boost::mpl::int_<__idx__> >::type >\
         BOOST_PP_CAT(a, __idx__);
 
-#define __MOZO_PHP_CONCRETE_ARG_INFO_TEMPLATE(__z__, __arity__, __var__) \
+#define __BOOST_PHP_CONCRETE_ARG_INFO_TEMPLATE(__z__, __arity__, __var__) \
     template<> \
     template<typename Tsig_> \
     struct concrete_arg_info_enclosure<__arity__>::arg_info<Tsig_> { \
         concrete_arg_info_header<Tsig_> header; \
         BOOST_PP_REPEAT(__arity__, \
-                __MOZO_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE, _) \
+                __BOOST_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE, _) \
     };
 
-BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_CONCRETE_ARG_INFO_TEMPLATE, _);
+BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_CONCRETE_ARG_INFO_TEMPLATE, _);
 
-#undef __MOZO_PHP_CONCRETE_ARG_INFO_TEMPLATE
-#undef __MOZO_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE
+#undef __BOOST_PHP_CONCRETE_ARG_INFO_TEMPLATE
+#undef __BOOST_PHP_CONCRETE_ARG_INFO_ENTRY_TEMPLATE
 
 template<typename Tsig_>
 zend_arg_info* create_arg_info(const Tsig_&)
@@ -126,4 +126,4 @@ zend_arg_info* create_arg_info(const Tsig_&)
 
 } } } // namespace boost::php::detail
 
-#endif /* MOZO_PHP_DETAIL_ARG_INFO_FACTORY_HPP */
+#endif /* BOOST_PHP_DETAIL_ARG_INFO_FACTORY_HPP */

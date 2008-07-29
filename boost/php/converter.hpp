@@ -27,12 +27,12 @@
 
 #include <zend.h>
 
-#ifndef MOZO_PHP_VALUE_PTR_DEFINED
+#ifndef BOOST_PHP_VALUE_PTR_DEFINED
 #include <boost/php/value.hpp>
-#endif /* MOZO_PHP_VALUE_PTR_DEFINED */
+#endif /* BOOST_PHP_VALUE_PTR_DEFINED */
 
-#ifndef MOZO_PHP_TO_NATIVE_CONVERTER_DEFINED
-#define MOZO_PHP_TO_NATIVE_CONVERTER_DEFINED
+#ifndef BOOST_PHP_TO_NATIVE_CONVERTER_DEFINED
+#define BOOST_PHP_TO_NATIVE_CONVERTER_DEFINED
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/not.hpp>
@@ -125,10 +125,10 @@ struct to_native_converter<resource_handle, true> {
 };
 
 } } // namespace boost::php
-#endif /* MOZO_PHP_TO_NATIVE_CONVERTER_DEFINED */
+#endif /* BOOST_PHP_TO_NATIVE_CONVERTER_DEFINED */
 
-#ifndef MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
-#define MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
+#ifndef BOOST_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
+#define BOOST_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
 namespace boost { namespace php {
 
 template<typename Tnative_>
@@ -167,10 +167,10 @@ struct to_value_ptr_converter<value_ptr const&> {
 };
 
 } } // namespace boost::php
-#endif /* MOZO_PHP_TO_VALUE_PTR_CONVERTER_DEFINED */
+#endif /* BOOST_PHP_TO_VALUE_PTR_CONVERTER_DEFINED */
 
-#ifndef MOZO_PHP_VALUE_PTR_UTILS_DEFINED
-#define MOZO_PHP_VALUE_PTR_UTILS_DEFINED
+#ifndef BOOST_PHP_VALUE_PTR_UTILS_DEFINED
+#define BOOST_PHP_VALUE_PTR_UTILS_DEFINED
 namespace boost { namespace php {
 
 template<typename Tsrc_>
@@ -195,4 +195,4 @@ inline T_& to_native(value_ptr& val TSRMLS_DC)
 }
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_VALUE_PTR_UTILS_DEFINED */
+#endif /* BOOST_PHP_VALUE_PTR_UTILS_DEFINED */

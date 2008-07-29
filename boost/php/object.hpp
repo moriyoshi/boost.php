@@ -30,8 +30,8 @@
 #include <zend.h>
 #include <zend_objects_API.h>
 
-#ifndef MOZO_PHP_OBJECT_DEFINED
-#define MOZO_PHP_OBJECT_DEFINED
+#ifndef BOOST_PHP_OBJECT_DEFINED
+#define BOOST_PHP_OBJECT_DEFINED
 namespace boost { namespace php {
 
 class object: public ::zend_object {
@@ -52,10 +52,10 @@ public:
     }
 };
 } }
-#endif /* MOZO_PHP_OBJECT_DEFINED */
+#endif /* BOOST_PHP_OBJECT_DEFINED */
 
-#ifndef MOZO_PHP_OBJECT_MEMBER_DEFINED
-#define MOZO_PHP_OBJECT_MEMBER_DEFINED
+#ifndef BOOST_PHP_OBJECT_MEMBER_DEFINED
+#define BOOST_PHP_OBJECT_MEMBER_DEFINED
 namespace boost { namespace php {
 #if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 1 && PHP_RELEASE_VERSION > 2) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 1) || (PHP_MAJOR_VERSION > 5)
 #ifdef ZTS
@@ -124,10 +124,10 @@ inline object::~object()
 }
 #endif /* (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 1 && PHP_RELEASE_VERSION > 2) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 1) || (PHP_MAJOR_VERSION > 5) */
 } } // namespace boost::php
-#endif /* MOZO_PHP_OBJECT_MEMBER_DEFINED */
+#endif /* BOOST_PHP_OBJECT_MEMBER_DEFINED */
 
-#ifndef MOZO_PHP_SENSIBLE_OBJECT_DEFINED
-#define MOZO_PHP_SENSIBLE_OBJECT_DEFINED
+#ifndef BOOST_PHP_SENSIBLE_OBJECT_DEFINED
+#define BOOST_PHP_SENSIBLE_OBJECT_DEFINED
 namespace boost { namespace php {
 class sensible_object;
 } } // namespace boost::php
@@ -183,4 +183,4 @@ inline void intrusive_ptr_del_ref(::boost::php::sensible_object* p)
 {
     p->release();
 }
-#endif /* MOZO_PHP_SENSIBLE_OBJECT_DEFINED */
+#endif /* BOOST_PHP_SENSIBLE_OBJECT_DEFINED */

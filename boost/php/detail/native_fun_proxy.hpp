@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_DETAIL_NATIVE_FUN_PROXY_HPP
-#define MOZO_PHP_DETAIL_NATIVE_FUN_PROXY_HPP
+#ifndef BOOST_PHP_DETAIL_NATIVE_FUN_PROXY_HPP
+#define BOOST_PHP_DETAIL_NATIVE_FUN_PROXY_HPP
 
 #include <cstddef>
 #include <stdexcept>
@@ -60,20 +60,20 @@ public:
     native_fun_proxy(typename Tsig_::function_type, const Toretr_&) {}
 };
 
-#define __MOZO_PHP_NATIVE_FUN_PROXY_CONV_TPL(__z__, __idx__, __var__) \
+#define __BOOST_PHP_NATIVE_FUN_PROXY_CONV_TPL(__z__, __idx__, __var__) \
     , to_native< typename ::boost::mpl::at<typename Tsig_::arguments, typename ::boost::mpl::int_<__idx__> >::type >(value_ptr(params[__idx__]) TSRMLS_CC)
 
-#define __MOZO_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__) \
-    fun_(__obj__ BOOST_PP_REPEAT_##__z__(__arity__, __MOZO_PHP_NATIVE_FUN_PROXY_CONV_TPL, _)) \
+#define __BOOST_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__) \
+    fun_(__obj__ BOOST_PP_REPEAT_##__z__(__arity__, __BOOST_PHP_NATIVE_FUN_PROXY_CONV_TPL, _)) \
 
-#define __MOZO_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL(__z__, __arity__, __obj__) \
-    __MOZO_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__)
+#define __BOOST_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL(__z__, __arity__, __obj__) \
+    __BOOST_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__)
 
-#define __MOZO_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL(__z__, __arity__, __obj__) \
-    reinterpret_cast<value*>(return_value)->swap(*to_value_ptr(__MOZO_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__) TSRMLS_CC));
+#define __BOOST_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL(__z__, __arity__, __obj__) \
+    reinterpret_cast<value*>(return_value)->swap(*to_value_ptr(__BOOST_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL(__z__, __arity__, __obj__) TSRMLS_CC));
 
 #if ZEND_MODULE_API_NO < 20071006
-#define __MOZO_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
+#define __BOOST_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
     public: \
         native_fun_proxy(typename Tsig_::function_type const& fun, \
                 const Toretr_& oretr) \
@@ -107,7 +107,7 @@ public:
         typename Tsig_::function_type fun_; \
         const Toretr_& oretr_;
 #else
-#define __MOZO_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
+#define __BOOST_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, __invoke__) \
     public: \
         native_fun_proxy(typename Tsig_::function_type fun, \
                 const Toretr_& oretr) \
@@ -142,26 +142,26 @@ public:
         const Toretr_& oretr_;
 #endif /* ZEND_MODULE_API_NO < 20071006 */
 
-#define __MOZO_PHP_NATIVE_FUN_PROXY_TPL(__z__, __arity__, __var__) \
+#define __BOOST_PHP_NATIVE_FUN_PROXY_TPL(__z__, __arity__, __var__) \
     template<typename Tsig_, typename Toretr_, typename Tretval_> \
     class native_fun_proxy<Tsig_, Toretr_, Tretval_, __arity__>: public native_fun_proxy_base { \
-    __MOZO_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, \
-            __MOZO_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL) \
+    __BOOST_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, \
+            __BOOST_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL) \
     }; \
     template<typename Tsig_, typename Toretr_> \
     class native_fun_proxy<Tsig_, Toretr_, void, __arity__>: public native_fun_proxy_base { \
-    __MOZO_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, \
-            __MOZO_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL) \
+    __BOOST_PHP_NATIVE_FUN_PROXY_BODY_TPL(__z__, __arity__, __var__, \
+            __BOOST_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL) \
     };
 
-BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __MOZO_PHP_NATIVE_FUN_PROXY_TPL, _);
+BOOST_PP_REPEAT_FROM_TO(0, BOOST_MPL_LIMIT_VECTOR_SIZE, __BOOST_PHP_NATIVE_FUN_PROXY_TPL, _);
 
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_CONV_TPL
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_BODY_TPL
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_TPL
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL
-#undef __MOZO_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_CONV_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_BODY_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_INVOCATION_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_NONVOID_INVOCATION_TPL
+#undef __BOOST_PHP_NATIVE_FUN_PROXY_VOID_INVOCATION_TPL
 
 template<typename Tsig_, typename Toretr_>
 inline native_fun_proxy_base* create_native_fun_proxy(const Tsig_& sig, const Toretr_& oretr)
@@ -178,4 +178,4 @@ inline native_fun_proxy_base* create_native_fun_proxy(const Tsig_& sig)
 
 } } } // namespace boost::php::detail
 
-#endif /* MOZO_PHP_DETAIL_NATIVE_FUN_PROXY_HPP */
+#endif /* BOOST_PHP_DETAIL_NATIVE_FUN_PROXY_HPP */

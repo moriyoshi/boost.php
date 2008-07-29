@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_MODULE_HPP
-#define MOZO_PHP_MODULE_HPP
+#ifndef BOOST_PHP_MODULE_HPP
+#define BOOST_PHP_MODULE_HPP
 
 #include <new>
 #include <cstddef>
@@ -191,4 +191,4 @@ public:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_MODULE_HPP */
+#endif /* BOOST_PHP_MODULE_HPP */

@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_DETAIL_VALUE_HELPERS_HPP
-#define MOZO_PHP_DETAIL_VALUE_HELPERS_HPP
+#ifndef BOOST_PHP_DETAIL_VALUE_HELPERS_HPP
+#define BOOST_PHP_DETAIL_VALUE_HELPERS_HPP
 
 #include <zend.h>
 #include <boost/type_traits.hpp>
@@ -91,4 +91,4 @@ struct value_copy_ctor_fun< ::zval> {
 
 } } } // namespace boost::php::detail
 
-#endif /* MOZO_PHP_DETAIL_VALUE_HELPERS_HPP */
+#endif /* BOOST_PHP_DETAIL_VALUE_HELPERS_HPP */

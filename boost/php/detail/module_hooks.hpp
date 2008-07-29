@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_MODULE_HOOKS_HPP
-#define MOZO_PHP_MODULE_HOOKS_HPP
+#ifndef BOOST_PHP_MODULE_HOOKS_HPP
+#define BOOST_PHP_MODULE_HOOKS_HPP
 
 namespace boost { namespace php { namespace detail {
 
@@ -73,4 +73,4 @@ struct module_hooks
 
 } } } // namespace boost::php::detail::module_hook
 
-#endif /* MOZO_PHP_MODULE_HOOKS_HPP */
+#endif /* BOOST_PHP_MODULE_HOOKS_HPP */

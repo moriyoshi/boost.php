@@ -30,8 +30,8 @@
 #include <zend.h>
 #include <boost/php/error.hpp>
 
-#ifndef MOZO_PHP_RUNTIME_ERROR_DEFINED
-#define MOZO_PHP_RUNTIME_ERROR_DEFINED
+#ifndef BOOST_PHP_RUNTIME_ERROR_DEFINED
+#define BOOST_PHP_RUNTIME_ERROR_DEFINED
 
 namespace boost { namespace php {
 class runtime_error: public ::std::runtime_error {
@@ -58,10 +58,10 @@ protected:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_RUNTIME_ERROR_DEFINED */
+#endif /* BOOST_PHP_RUNTIME_ERROR_DEFINED */
 
-#ifndef MOZO_PHP_MISC_ERRORS_DEFINED
-#define MOZO_PHP_MISC_ERRORS_DEFINED
+#ifndef BOOST_PHP_MISC_ERRORS_DEFINED
+#define BOOST_PHP_MISC_ERRORS_DEFINED
 
 namespace boost { namespace php {
 
@@ -115,12 +115,12 @@ public:
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_MISC_ERRORS_DEFINED */
+#endif /* BOOST_PHP_MISC_ERRORS_DEFINED */
 
 #include <boost/php/utils.hpp>
 
-#ifndef MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
-#define MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
+#ifndef BOOST_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
+#define BOOST_PHP_RUNTIME_ERROR_MEMBERS_DEFINED
 
 namespace boost { namespace php {
 
@@ -137,4 +137,4 @@ inline runtime_error::runtime_error(const ::std::string msg,
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_RUNTIME_ERROR_MEMBERS_DEFINED */
+#endif /* BOOST_PHP_RUNTIME_ERROR_MEMBERS_DEFINED */

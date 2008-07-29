@@ -25,52 +25,52 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_MODULE_MACROS_HPP
-#define MOZO_PHP_MODULE_MACROS_HPP
+#ifndef BOOST_PHP_MODULE_MACROS_HPP
+#define BOOST_PHP_MODULE_MACROS_HPP
 
 #include <boost/php/detail/object_retriever.hpp>
 #include <boost/php/detail/module_hooks.hpp>
 
-#define MOZO_PHP_ADD_MODULE_VARIATION(__mod_name__) \
+#define BOOST_PHP_ADD_MODULE_VARIATION(__mod_name__) \
     namespace boost { namespace php { namespace _ { \
         struct __mod_name__ {}; \
     } } }
 
-#define MOZO_PHP_ASSOCIATE_MODULE_WITH_CLASS(__mod_name__, __mod_klass__) \
+#define BOOST_PHP_ASSOCIATE_MODULE_WITH_CLASS(__mod_name__, __mod_klass__) \
     namespace boost { namespace php { namespace detail { \
     template<> struct module_class_of< ::boost::php::_::__mod_name__> { \
         typedef __mod_klass__ type; \
     }; \
     } } }
 
-#define MOZO_PHP_MODULE_CLASS(__mod_name__) \
+#define BOOST_PHP_MODULE_CLASS(__mod_name__) \
     ::boost::php::detail::module_class_of< ::boost::php::_::__mod_name__>::type
-#define MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__) \
+#define BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__) \
     ::boost::php::detail::module_class_of< ::boost::php::_::__mod_name__>::type::handler
-#define MOZO_PHP_MODULE_HANDLER(__mod_name__) \
+#define BOOST_PHP_MODULE_HANDLER(__mod_name__) \
     BOOST_PP_CAT(__mod_name__, _globals)
-#define MOZO_PHP_MODULE_VAR(__mod_name__) \
+#define BOOST_PHP_MODULE_VAR(__mod_name__) \
     BOOST_PP_CAT(__mod_name__, _module)
-#define MOZO_PHP_MODULE_ENTRY_VAR(__mod_name__) \
+#define BOOST_PHP_MODULE_ENTRY_VAR(__mod_name__) \
     BOOST_PP_CAT(__mod_name__, _module_entry)
-#define MOZO_PHP_TSRM_ID_VAR(__mod_name__) \
-    BOOST_PP_CAT(MOZO_PHP_MODULE_HANDLER(__mod_name__), _id)
-#define MOZO_PHP_MODULE_HANDLER_CTOR(__mod_name__) \
-    BOOST_PP_CAT(MOZO_PHP_MODULE_HANDLER(__mod_name__), _ctor)
-#define MOZO_PHP_MODULE_HANDLER_DTOR(__mod_name__) \
-    BOOST_PP_CAT(MOZO_PHP_MODULE_HANDLER(__mod_name__), _dtor)
-#define MOZO_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__) \
+#define BOOST_PHP_TSRM_ID_VAR(__mod_name__) \
+    BOOST_PP_CAT(BOOST_PHP_MODULE_HANDLER(__mod_name__), _id)
+#define BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__) \
+    BOOST_PP_CAT(BOOST_PHP_MODULE_HANDLER(__mod_name__), _ctor)
+#define BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__) \
+    BOOST_PP_CAT(BOOST_PHP_MODULE_HANDLER(__mod_name__), _dtor)
+#define BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__) \
     BOOST_PP_CAT(zm_post_deactivate_, __mod_name__)
 
-#define MOZO_PHP_USE_MODULE_HANDLER_CTOR_AND_DTOR(__mod_name__) \
+#define BOOST_PHP_USE_MODULE_HANDLER_CTOR_AND_DTOR(__mod_name__) \
 extern "C" { \
-    static void MOZO_PHP_MODULE_HANDLER_CTOR(__mod_name__)(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC); \
-    static void MOZO_PHP_MODULE_HANDLER_DTOR(__mod_name__)(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC); \
+    static void BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__)(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC); \
+    static void BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__)(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC); \
 }
 
 #ifdef ZTS
 
-#define MOZO_PHP_MODULE_HEADER(__mod_name__, __version__) \
+#define BOOST_PHP_MODULE_HEADER(__mod_name__, __version__) \
     { \
         STANDARD_MODULE_HEADER, \
         const_cast<char*>(#__mod_name__), \
@@ -81,31 +81,31 @@ extern "C" { \
         ZEND_RSHUTDOWN(__mod_name__), \
         ZEND_MINFO(__mod_name__), \
         const_cast<char*>(__version__), \
-        sizeof(MOZO_PHP_MODULE_CLASS(__mod_name__)), \
-        &MOZO_PHP_TSRM_ID_VAR(__mod_name__), \
+        sizeof(BOOST_PHP_MODULE_CLASS(__mod_name__)), \
+        &BOOST_PHP_TSRM_ID_VAR(__mod_name__), \
         NULL, \
         NULL, \
-        &MOZO_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
+        &BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
         0, 0, NULL, 0 \
     }
 
-#define MOZO_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
-    extern "C" { ZEND_API ts_rsrc_id MOZO_PHP_TSRM_ID_VAR(__mod_name__); }
+#define BOOST_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
+    extern "C" { ZEND_API ts_rsrc_id BOOST_PHP_TSRM_ID_VAR(__mod_name__); }
 
-#define MOZO_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
-    extern "C" { extern ZEND_API ts_rsrc_id MOZO_PHP_TSRM_ID_VAR(__mod_name__); }
+#define BOOST_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
+    extern "C" { extern ZEND_API ts_rsrc_id BOOST_PHP_TSRM_ID_VAR(__mod_name__); }
 
-#define MOZO_PHP_MODULE_SLOT(__mod_name__) \
-    reinterpret_cast<MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)*>((*reinterpret_cast<void***>(tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(MOZO_PHP_TSRM_ID_VAR(__mod_name__))])
+#define BOOST_PHP_MODULE_SLOT(__mod_name__) \
+    reinterpret_cast<BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)*>((*reinterpret_cast<void***>(tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(BOOST_PHP_TSRM_ID_VAR(__mod_name__))])
 
-#define MOZO_PHP_DECLARE_MINIT_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_MINIT_FUNCTION(__mod_name__) \
     ZEND_MINIT_FUNCTION(__mod_name__) { \
-        ts_allocate_id(&MOZO_PHP_TSRM_ID_VAR(__mod_name__), \
-                sizeof(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)), \
-                (ts_allocate_ctor)&MOZO_PHP_MODULE_HANDLER_CTOR(__mod_name__),\
-                (ts_allocate_dtor)&MOZO_PHP_MODULE_HANDLER_DTOR(__mod_name__));\
+        ts_allocate_id(&BOOST_PHP_TSRM_ID_VAR(__mod_name__), \
+                sizeof(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)), \
+                (ts_allocate_ctor)&BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__),\
+                (ts_allocate_dtor)&BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__));\
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__initialize(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__initialize(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
@@ -113,11 +113,11 @@ extern "C" { \
         return SUCCESS; \
     }
 
-#define MOZO_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__) \
     ZEND_MSHUTDOWN_FUNCTION(__mod_name__) { \
-        ts_free_id(MOZO_PHP_TSRM_ID_VAR(__mod_name__)); \
+        ts_free_id(BOOST_PHP_TSRM_ID_VAR(__mod_name__)); \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__finalize(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__finalize(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
         } \
@@ -126,7 +126,7 @@ extern "C" { \
 
 #else /* ZTS */
 
-#define MOZO_PHP_MODULE_HEADER(__mod_name__, __version__) \
+#define BOOST_PHP_MODULE_HEADER(__mod_name__, __version__) \
     { \
         STANDARD_MODULE_HEADER, \
         const_cast<char*>(#__mod_name__), \
@@ -137,42 +137,42 @@ extern "C" { \
         ZEND_RSHUTDOWN(__mod_name__), \
         ZEND_MINFO(__mod_name__), \
         const_cast<char*>(__version__), \
-        sizeof(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)), \
-        &MOZO_PHP_MODULE_HANDLER(__mod_name__), \
+        sizeof(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)), \
+        &BOOST_PHP_MODULE_HANDLER(__mod_name__), \
         NULL, \
         NULL, \
-        &MOZO_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
+        &BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
         0, 0, NULL, 0 \
     }
 
-#define MOZO_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
-    extern "C" { ZEND_API MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__) MOZO_PHP_MODULE_HANDLER(__mod_name__)( \
-        MOZO_PHP_MODULE_VAR(&__mod_name__)); }
+#define BOOST_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
+    extern "C" { ZEND_API BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__) BOOST_PHP_MODULE_HANDLER(__mod_name__)( \
+        BOOST_PHP_MODULE_VAR(&__mod_name__)); }
 
-#define MOZO_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
-    extern "C" { extern ZEND_API MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__) MOZO_PHP_MODULE_HANDLER(__mod_name__); }
+#define BOOST_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
+    extern "C" { extern ZEND_API BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__) BOOST_PHP_MODULE_HANDLER(__mod_name__); }
 
-#define MOZO_PHP_MODULE_SLOT(__mod_name__) \
-    (&MOZO_PHP_MODULE_HANDLER(__mod_name__))
+#define BOOST_PHP_MODULE_SLOT(__mod_name__) \
+    (&BOOST_PHP_MODULE_HANDLER(__mod_name__))
 
-#define MOZO_PHP_DECLARE_MINIT_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_MINIT_FUNCTION(__mod_name__) \
     ZEND_MINIT_FUNCTION(__mod_name__) { \
-        MOZO_PHP_MODULE_HANDLER_CTOR(__mod_name__)(MOZO_PHP_MODULE_SLOT(__mod_name__)); \
+        BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__)(BOOST_PHP_MODULE_SLOT(__mod_name__)); \
         try { \
-            MOZO_PHP_MODULE_INVOKE_HOOKS(__mod_name__, initializers); \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__initialize(); \
+            BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, initializers); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__initialize(); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
         } \
     }
 
-#define MOZO_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__) \
     ZEND_MSHUTDOWN_FUNCTION(__mod_name__) { \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__finalize(); \
-            MOZO_PHP_MODULE_INVOKE_HOOKS(__mod_name__, finalizers); \
-            MOZO_PHP_MODULE_HANDLER_DTOR(__mod_name__)(MOZO_PHP_MODULE_SLOT(__mod_name__)); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__finalize(); \
+            BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, finalizers); \
+            BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__)(BOOST_PHP_MODULE_SLOT(__mod_name__)); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
         } \
@@ -181,10 +181,10 @@ extern "C" { \
 
 #endif /* ZTS */
 
-#define MOZO_PHP_DECLARE_RINIT_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_RINIT_FUNCTION(__mod_name__) \
     ZEND_RINIT_FUNCTION(__mod_name__) { \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__activate(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__activate(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
@@ -192,10 +192,10 @@ extern "C" { \
         return SUCCESS; \
     }
 
-#define MOZO_PHP_DECLARE_RSHUTDOWN_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_RSHUTDOWN_FUNCTION(__mod_name__) \
     ZEND_RSHUTDOWN_FUNCTION(__mod_name__) { \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__deactivate(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__deactivate(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
@@ -203,21 +203,21 @@ extern "C" { \
         return SUCCESS; \
     }
 
-#define MOZO_PHP_DECLARE_MINFO_FUNCTION(__mod_name__) \
+#define BOOST_PHP_DECLARE_MINFO_FUNCTION(__mod_name__) \
     ZEND_MINFO_FUNCTION(__mod_name__) { \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__display_info(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__display_info(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_ERROR, const_cast<char*>("%s"), e.what()); \
             _zend_bailout(const_cast<char*>(__FILE__), __LINE__); \
         } \
     }
 
-#define MOZO_PHP_DECLARE_POST_RSHUTDOWN_FUNCTION(__mod_name__) \
-    int MOZO_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__)() { \
+#define BOOST_PHP_DECLARE_POST_RSHUTDOWN_FUNCTION(__mod_name__) \
+    int BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__)() { \
         TSRMLS_FETCH(); \
         try { \
-            MOZO_PHP_MODULE_SLOT(__mod_name__)->__post_deactivate(TSRMLS_C); \
+            BOOST_PHP_MODULE_SLOT(__mod_name__)->__post_deactivate(TSRMLS_C); \
         } catch (const ::std::exception& e) { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
@@ -225,80 +225,80 @@ extern "C" { \
         return SUCCESS; \
     }
 
-#define MOZO_PHP_MODULE_INVOKE_HOOKS(__mod_name__, __kind__) \
-    MOZO_PHP_MODULE_EACH_HOOK( \
+#define BOOST_PHP_MODULE_INVOKE_HOOKS(__mod_name__, __kind__) \
+    BOOST_PHP_MODULE_EACH_HOOK( \
             ::boost::php::detail::module_hooks::__kind__##_type, \
-            MOZO_PHP_MODULE_HOOKS(__mod_name__).__kind__, _())
+            BOOST_PHP_MODULE_HOOKS(__mod_name__).__kind__, _())
 
-#define MOZO_PHP_MODULE_EACH_HOOK(__type__, __list__, __action__) \
+#define BOOST_PHP_MODULE_EACH_HOOK(__type__, __list__, __action__) \
     for (__type__* _ = __list__.first; _; _ = _->next) { __action__ }
 
-#define MOZO_PHP_MODULE_HOOKS(__mod_name__) \
-    ::boost::php::detail::module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) >
+#define BOOST_PHP_MODULE_HOOKS(__mod_name__) \
+    ::boost::php::detail::module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >
 
-#define MOZO_PHP_DECLARE_MODULE_HOOKS(__mod_name__) \
+#define BOOST_PHP_DECLARE_MODULE_HOOKS(__mod_name__) \
     namespace boost { namespace php { namespace detail { \
     template<> \
-    module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) > \
-    module_hooks< MOZO_PHP_MODULE_CLASS(__mod_name__) >::singleton; \
+    module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) > \
+    module_hooks< BOOST_PHP_MODULE_CLASS(__mod_name__) >::singleton; \
     } } }
 
-#define MOZO_PHP_USE_MODULE_SLOT(__mod_name__, __mod_klass__) \
-    MOZO_PHP_ASSOCIATE_MODULE_WITH_CLASS(__mod_name__, __mod_klass__) \
-    MOZO_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
+#define BOOST_PHP_USE_MODULE_SLOT(__mod_name__, __mod_klass__) \
+    BOOST_PHP_ASSOCIATE_MODULE_WITH_CLASS(__mod_name__, __mod_klass__) \
+    BOOST_PHP_USE_MODULE_SLOT_CONFIG(__mod_name__) \
 
-#define MOZO_PHP_USE_INIT_FUNCTIONS(__mod_name__) \
+#define BOOST_PHP_USE_INIT_FUNCTIONS(__mod_name__) \
     extern "C" { \
         static ZEND_MINIT_FUNCTION(__mod_name__); \
         static ZEND_MSHUTDOWN_FUNCTION(__mod_name__); \
         static ZEND_MINFO_FUNCTION(__mod_name__); \
         static ZEND_RINIT_FUNCTION(__mod_name__); \
         static ZEND_RSHUTDOWN_FUNCTION(__mod_name__); \
-        static int MOZO_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__)(); \
+        static int BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__)(); \
     }
 
-#define MOZO_PHP_DECLARE_INIT_FUNCTIONS(__mod_name__, __mod_klass__) \
+#define BOOST_PHP_DECLARE_INIT_FUNCTIONS(__mod_name__, __mod_klass__) \
     extern "C" { \
         static void \
-        MOZO_PHP_MODULE_HANDLER_CTOR(__mod_name__)(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC) \
+        BOOST_PHP_MODULE_HANDLER_CTOR(__mod_name__)(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC) \
         { \
-            new(ptr) MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)(&MOZO_PHP_MODULE_VAR(__mod_name__)); \
+            new(ptr) BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)(&BOOST_PHP_MODULE_VAR(__mod_name__)); \
         } \
         static void \
-        MOZO_PHP_MODULE_HANDLER_DTOR(__mod_name__)(MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC) \
+        BOOST_PHP_MODULE_HANDLER_DTOR(__mod_name__)(BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)* ptr TSRMLS_DC) \
         { \
             ptr->~handler(); \
         } \
-        MOZO_PHP_DECLARE_MINIT_FUNCTION(__mod_name__); \
-        MOZO_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__); \
-        MOZO_PHP_DECLARE_MINFO_FUNCTION(__mod_name__); \
-        MOZO_PHP_DECLARE_RINIT_FUNCTION(__mod_name__); \
-        MOZO_PHP_DECLARE_RSHUTDOWN_FUNCTION(__mod_name__); \
-        MOZO_PHP_DECLARE_POST_RSHUTDOWN_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_MINIT_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_MINFO_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_RINIT_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_RSHUTDOWN_FUNCTION(__mod_name__); \
+        BOOST_PHP_DECLARE_POST_RSHUTDOWN_FUNCTION(__mod_name__); \
     } \
-    MOZO_PHP_DECLARE_MODULE_HOOKS(__mod_name__);
+    BOOST_PHP_DECLARE_MODULE_HOOKS(__mod_name__);
 
-#define MOZO_PHP_DECLARE_HANDLER_RETRIEVER(__mod_name__) \
+#define BOOST_PHP_DECLARE_HANDLER_RETRIEVER(__mod_name__) \
     namespace boost { namespace php { \
         template<> \
-        MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)* \
-        object_retriever<MOZO_PHP_MODULE_HANDLER_CLASS(__mod_name__)>:: \
+        BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)* \
+        object_retriever<BOOST_PHP_MODULE_HANDLER_CLASS(__mod_name__)>:: \
                 operator()(INTERNAL_FUNCTION_PARAMETERS) const { \
-            return MOZO_PHP_MODULE_SLOT(__mod_name__); \
+            return BOOST_PHP_MODULE_SLOT(__mod_name__); \
         } \
     } }
 
-#define MOZO_PHP_MODULE(__mod_name__, __version__, __mod_klass__) \
-    MOZO_PHP_ADD_MODULE_VARIATION(__mod_name__); \
-    MOZO_PHP_USE_MODULE_SLOT(__mod_name__, __mod_klass__); \
-    MOZO_PHP_USE_INIT_FUNCTIONS(__mod_name__); \
-    MOZO_PHP_USE_MODULE_HANDLER_CTOR_AND_DTOR(__mod_name__); \
-    extern "C" { zend_module_entry MOZO_PHP_MODULE_ENTRY_VAR(__mod_name__) = \
-            MOZO_PHP_MODULE_HEADER(__mod_name__, __version__); } \
-    static __mod_klass__ MOZO_PHP_MODULE_VAR(__mod_name__)( \
-            &MOZO_PHP_MODULE_ENTRY_VAR(__mod_name__)); \
-    MOZO_PHP_DECLARE_MODULE_SLOT(__mod_name__); \
-    MOZO_PHP_DECLARE_INIT_FUNCTIONS(__mod_name__, __mod_klass__); \
-    MOZO_PHP_DECLARE_HANDLER_RETRIEVER(__mod_name__)
+#define BOOST_PHP_MODULE(__mod_name__, __version__, __mod_klass__) \
+    BOOST_PHP_ADD_MODULE_VARIATION(__mod_name__); \
+    BOOST_PHP_USE_MODULE_SLOT(__mod_name__, __mod_klass__); \
+    BOOST_PHP_USE_INIT_FUNCTIONS(__mod_name__); \
+    BOOST_PHP_USE_MODULE_HANDLER_CTOR_AND_DTOR(__mod_name__); \
+    extern "C" { zend_module_entry BOOST_PHP_MODULE_ENTRY_VAR(__mod_name__) = \
+            BOOST_PHP_MODULE_HEADER(__mod_name__, __version__); } \
+    static __mod_klass__ BOOST_PHP_MODULE_VAR(__mod_name__)( \
+            &BOOST_PHP_MODULE_ENTRY_VAR(__mod_name__)); \
+    BOOST_PHP_DECLARE_MODULE_SLOT(__mod_name__); \
+    BOOST_PHP_DECLARE_INIT_FUNCTIONS(__mod_name__, __mod_klass__); \
+    BOOST_PHP_DECLARE_HANDLER_RETRIEVER(__mod_name__)
 
-#endif /* MOZO_PHP_MODULE_MACROS_HPP */
+#endif /* BOOST_PHP_MODULE_MACROS_HPP */

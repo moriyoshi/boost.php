@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_DETAIL_STREAM_SUPPORT_HPP
-#define MOZO_PHP_DETAIL_STREAM_SUPPORT_HPP
+#ifndef BOOST_PHP_DETAIL_STREAM_SUPPORT_HPP
+#define BOOST_PHP_DETAIL_STREAM_SUPPORT_HPP
 
 #include <ostream>
 #include <boost/config.hpp>
@@ -80,4 +80,4 @@ operator<<(::std::basic_ostream<E, T>& os, const ::boost::php::value_ptr& p)
     return os;
 }
 
-#endif /* MOZO_PHP_DETAIL_STREAM_SUPPORT_HPP */
+#endif /* BOOST_PHP_DETAIL_STREAM_SUPPORT_HPP */

@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_UTILS_HPP
-#define MOZO_PHP_UTILS_HPP
+#ifndef BOOST_PHP_UTILS_HPP
+#define BOOST_PHP_UTILS_HPP
 
 #include <string>
 #include <cstddef>
@@ -113,4 +113,4 @@ print_errorf(int type, const char* filename, ::uint lineno, const char* format,
 
 } } } // namespace boost::php::utils
 
-#endif /* MOZO_PHP_UTILS_HPP */
+#endif /* BOOST_PHP_UTILS_HPP */

@@ -39,17 +39,17 @@
 #include <boost/php/resource_handle.hpp>
 #include <boost/php/detail/tsrm_macros.hpp>
 
-#ifndef MOZO_PHP_VALUE_DEFINED
-#define MOZO_PHP_VALUE_DEFINED
+#ifndef BOOST_PHP_VALUE_DEFINED
+#define BOOST_PHP_VALUE_DEFINED
 
 #if ZEND_MODULE_API_NO < 20071006
-#define MOZO_PHP_ZVAL_ASSERT_REFCOUNT(p) \
+#define BOOST_PHP_ZVAL_ASSERT_REFCOUNT(p) \
         BOOST_ASSERT((p)->refcount >= 1)
-#define MOZO_PHP_ZVAL_ADDREF(p) ZVAL_ADDREF(p)
+#define BOOST_PHP_ZVAL_ADDREF(p) ZVAL_ADDREF(p)
 #else
-#define MOZO_PHP_ZVAL_ASSERT_REFCOUNT(p) \
+#define BOOST_PHP_ZVAL_ASSERT_REFCOUNT(p) \
         BOOST_ASSERT(Z_REFCOUNT_P(p) >= 1)
-#define MOZO_PHP_ZVAL_ADDREF(p) Z_ADDREF_P(p)
+#define BOOST_PHP_ZVAL_ADDREF(p) Z_ADDREF_P(p)
 #endif /* ZEND_MODULE_API_NO < 20071006 */
 
 namespace boost { namespace php {
@@ -207,87 +207,87 @@ public:
 
 #ifdef ZTS
     const value concat(::zval const& rhs) const {
-        return concat(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return concat(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_equal(::zval const& rhs) const {
-        return is_equal(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_equal(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_not_equal(::zval const& rhs) const {
-        return is_not_equal(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_not_equal(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value add(::zval const& rhs) const {
-        return add(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return add(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value mul(::zval const& rhs) const {
-        return mul(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return mul(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value sub(::zval const& rhs) const {
-        return sub(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return sub(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value div(::zval const& rhs) const {
-        return div(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return div(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value mod(::zval const& rhs) const {
-        return mod(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return mod(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value bitwise_or(::zval const& rhs) const {
-        return bitwise_or(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return bitwise_or(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value bitwise_and(::zval const& rhs) const {
-        return bitwise_and(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return bitwise_and(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value bitwise_xor(::zval const& rhs) const {
-        return bitwise_xor(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return bitwise_xor(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value shift_right(::zval const& rhs) const {
-        return shift_right(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return shift_right(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value shift_left(::zval const& rhs) const {
-        return shift_left(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return shift_left(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_smaller(::zval const& rhs) const {
-        return is_smaller(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_smaller(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_greater_or_equal(::zval const& rhs) const {
-        return is_greater_or_equal(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_greater_or_equal(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_smaller_or_equal(::zval const& rhs) const {
-        return is_smaller_or_equal(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_smaller_or_equal(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_greater(::zval const& rhs) const {
-        return is_greater(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_greater(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_identical(::zval const& rhs) const {
-        return is_identical(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_identical(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value is_not_identical(::zval const& rhs) const {
-        return is_not_identical(rhs MOZO_PHP_TSRM_DIRECT_CC);
+        return is_not_identical(rhs BOOST_PHP_TSRM_DIRECT_CC);
     }
 
     const value boolean_not() const {
-        return boolean_not(MOZO_PHP_TSRM_DIRECT_C);
+        return boolean_not(BOOST_PHP_TSRM_DIRECT_C);
     }
 
     const value bitwise_not() const {
-        return bitwise_not(MOZO_PHP_TSRM_DIRECT_C);
+        return bitwise_not(BOOST_PHP_TSRM_DIRECT_C);
     }
 #endif /* ZTS */
 
@@ -469,41 +469,41 @@ private:
     }
 };
 
-#endif /* MOZO_PHP_VALUE_DEFINED */
+#endif /* BOOST_PHP_VALUE_DEFINED */
 
-#ifndef MOZO_PHP_VALUE_PTR_DEFINED
-#define MOZO_PHP_VALUE_PTR_DEFINED
+#ifndef BOOST_PHP_VALUE_PTR_DEFINED
+#define BOOST_PHP_VALUE_PTR_DEFINED
 class value_ptr {
 public:
     value_ptr(): p_(0)
     {
         TSRMLS_FETCH();
         p_ = reinterpret_cast<value*>(&EG(uninitialized_zval));
-        MOZO_PHP_ZVAL_ADDREF(p_);
+        BOOST_PHP_ZVAL_ADDREF(p_);
     }
 
     value_ptr(::zval* p): p_(static_cast<value*>(p)) {
-        MOZO_PHP_ZVAL_ADDREF(p_);
+        BOOST_PHP_ZVAL_ADDREF(p_);
     }
 
     value_ptr(::zval* p, bool add_ref): p_(static_cast<value*>(p)) {
         if (add_ref) {
-            MOZO_PHP_ZVAL_ADDREF(p_);
+            BOOST_PHP_ZVAL_ADDREF(p_);
         }
     }
 
     value_ptr(::zval*const* that): p_(static_cast<value*>(*that)) {
-        MOZO_PHP_ZVAL_ASSERT_REFCOUNT(p_);
-        MOZO_PHP_ZVAL_ADDREF(p_);
+        BOOST_PHP_ZVAL_ASSERT_REFCOUNT(p_);
+        BOOST_PHP_ZVAL_ADDREF(p_);
     }
 
     value_ptr(value_ptr const& that): p_(that.p_) {
-        MOZO_PHP_ZVAL_ASSERT_REFCOUNT(p_);
-        MOZO_PHP_ZVAL_ADDREF(p_);
+        BOOST_PHP_ZVAL_ASSERT_REFCOUNT(p_);
+        BOOST_PHP_ZVAL_ADDREF(p_);
     }
 
     ~value_ptr() {
-        MOZO_PHP_ZVAL_ASSERT_REFCOUNT(p_);
+        BOOST_PHP_ZVAL_ASSERT_REFCOUNT(p_);
         zval_ptr_dtor(reinterpret_cast<zval**>(&p_));
     }
 
@@ -560,13 +560,13 @@ protected:
 
 } } // namespace boost::php 
 
-#endif /* MOZO_PHP_VALUE_PTR_DEFINED */
+#endif /* BOOST_PHP_VALUE_PTR_DEFINED */
 
 #include <boost/php/exceptions.hpp>
 #include <boost/php/hashtable.hpp>
 
-#ifndef MOZO_PHP_VALUE_MEMBERS_DEFINED
-#define MOZO_PHP_VALUE_MEMBERS_DEFINED
+#ifndef BOOST_PHP_VALUE_MEMBERS_DEFINED
+#define BOOST_PHP_VALUE_MEMBERS_DEFINED
 
 namespace boost { namespace php {
 
@@ -621,187 +621,187 @@ inline value::value(int v) {
 
 inline const value value::concat(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == concat_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::is_equal(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_equal_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::is_not_equal(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_not_equal_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline value& value::increment() {
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == increment_function(this)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return *this;
 }
 
 inline value& value::decrement() {
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == decrement_function(this)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return *this;
 }
 
 inline const value value::add(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == add_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::sub(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == sub_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::mul(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == mul_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::div(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == div_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::mod(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == mod_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::bitwise_or(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == bitwise_or_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::bitwise_and(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == bitwise_and_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::bitwise_xor(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == bitwise_xor_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::shift_left(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == shift_left_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::shift_right(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == shift_right_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::is_smaller(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_smaller_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
@@ -811,13 +811,13 @@ inline const value value::is_greater_or_equal(::zval const& rhs TSRMLS_DC) const
 
 inline const value value::is_smaller_or_equal(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_smaller_or_equal_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
@@ -827,25 +827,25 @@ inline const value value::is_greater(::zval const& rhs TSRMLS_DC) const {
 
 inline const value value::is_identical(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_identical_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::is_not_identical(::zval const& rhs TSRMLS_DC) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == is_not_identical_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this)),
                 const_cast<zval*>(&rhs) TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
@@ -863,25 +863,25 @@ inline const value value::boolean_and(::zval const& rhs TSRMLS_DC) const {
 
 inline const value value::boolean_not(TSRMLS_D) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == boolean_not_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this))
                 TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
 inline const value value::bitwise_not(TSRMLS_D) const {
     value retval;
-    MOZO_PHP_BEGIN_CAPTURE_ERROR
+    BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == bitwise_not_function(&retval,
                 reinterpret_cast<zval*>(const_cast<value*>(this))
                 TSRMLS_CC)) {
-            throw arithmetic_error(MOZO_PHP_LAST_ERROR);
+            throw arithmetic_error(BOOST_PHP_LAST_ERROR);
         }
-    MOZO_PHP_END_CAPTURE_ERROR
+    BOOST_PHP_END_CAPTURE_ERROR
     return retval;
 }
 
@@ -990,10 +990,10 @@ inline value::operator ::zend_object_value const&() const
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_VALUE_MEMBERS_DEFINED */
+#endif /* BOOST_PHP_VALUE_MEMBERS_DEFINED */
 
-#ifndef MOZO_PHP_VALUE_PTR_MEMBER_DEFINED
-#define MOZO_PHP_VALUE_PTR_MEMBER_DEFINED
+#ifndef BOOST_PHP_VALUE_PTR_MEMBER_DEFINED
+#define BOOST_PHP_VALUE_PTR_MEMBER_DEFINED
 
 namespace boost { namespace php {
 
@@ -1020,7 +1020,7 @@ inline value_ptr value_ptr::as()
 
 } } // namespace boost::php
 
-#endif /* MOZO_PHP_VALUE_PTR_MEMBER_DEFINED */
+#endif /* BOOST_PHP_VALUE_PTR_MEMBER_DEFINED */
 
 #include <boost/php/converter.hpp>
 #include <boost/php/detail/stream_support.hpp>

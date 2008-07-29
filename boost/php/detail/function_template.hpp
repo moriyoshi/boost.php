@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_FUNCTION_TEMPLATE_HPP
-#define MOZO_PHP_FUNCTION_TEMPLATE_HPP
+#ifndef BOOST_PHP_FUNCTION_TEMPLATE_HPP
+#define BOOST_PHP_FUNCTION_TEMPLATE_HPP
 
 #include <cstddef>
 
@@ -47,28 +47,28 @@ class function {
 public:
     function(const ::zval& name, value_ptr object)
         : name_(name), object_(object), symtable_(0), fun_table_(0)
-          MOZO_PHP_TSRM_FETCH_IN_CTOR_C {}
+          BOOST_PHP_TSRM_FETCH_IN_CTOR_C {}
 
     function(const value& name, value_ptr object)
         : name_(name), object_(object), symtable_(0), fun_table_(0)
-          MOZO_PHP_TSRM_FETCH_IN_CTOR_C {}
+          BOOST_PHP_TSRM_FETCH_IN_CTOR_C {}
 
     function(const ::zval& name, hashtable<value_ptr>* symtable = 0,
             hashtable< ::zend_function>* fun_table = 0)
         : name_(name), object_(), symtable_(symtable), fun_table_(fun_table)
-          MOZO_PHP_TSRM_FETCH_IN_CTOR_C {}
+          BOOST_PHP_TSRM_FETCH_IN_CTOR_C {}
 
     function(const value& name, hashtable<value_ptr>* symtable = 0,
             hashtable< ::zend_function>* fun_table = 0)
         : name_(name), object_(), symtable_(symtable), fun_table_(fun_table)
-          MOZO_PHP_TSRM_FETCH_IN_CTOR_C {}
+          BOOST_PHP_TSRM_FETCH_IN_CTOR_C {}
 
-#define __MOZO_PHP_FUNCTOR_PARAM_ASSIGN_TPL(__z__, __idx__, __var__) \
+#define __BOOST_PHP_FUNCTOR_PARAM_ASSIGN_TPL(__z__, __idx__, __var__) \
     value_ptr BOOST_PP_CAT(_arg, __idx__)( \
             to_value_ptr(BOOST_PP_CAT(arg, __idx__) TSRMLS_CC)); \
     __var__[__idx__] = &BOOST_PP_CAT(_arg, __idx__);
 
-#define __MOZO_PHP_FUNCTOR_BODY_TPL(__z__, __arity__, __dummy__) \
+#define __BOOST_PHP_FUNCTOR_BODY_TPL(__z__, __arity__, __dummy__) \
 { \
     static const ::std::size_t arity = __arity__; \
     value_ptr* params[arity]; \
@@ -78,7 +78,7 @@ public:
             reinterpret_cast< hashtable< ::zend_function>*>( \
                 CG(function_table)); \
     } \
-    BOOST_PP_REPEAT(__arity__, __MOZO_PHP_FUNCTOR_PARAM_ASSIGN_TPL, params) \
+    BOOST_PP_REPEAT(__arity__, __BOOST_PHP_FUNCTOR_PARAM_ASSIGN_TPL, params) \
     if (FAILURE == call_user_function_ex(fun_table_, \
             object_->is_null() ? NULL: \
                 const_cast< ::zval**>( \
@@ -94,30 +94,30 @@ public:
     return value_ptr(retval, false); \
 }
 
-#define __MOZO_PHP_FUNCTOR_TPL(__z__, __arity__, __dummy__)  \
+#define __BOOST_PHP_FUNCTOR_TPL(__z__, __arity__, __dummy__)  \
 template< \
         BOOST_PP_ENUM_PARAMS_Z(__z__, __arity__, typename Targ) \
         > \
 value_ptr operator()( \
         BOOST_PP_ENUM_BINARY_PARAMS_Z(__z__, __arity__, Targ, arg)) const \
-__MOZO_PHP_FUNCTOR_BODY_TPL(__z__, __arity__, __dummy__)
+__BOOST_PHP_FUNCTOR_BODY_TPL(__z__, __arity__, __dummy__)
 
-BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_LIMIT_MAG, __MOZO_PHP_FUNCTOR_TPL,)
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_LIMIT_MAG, __BOOST_PHP_FUNCTOR_TPL,)
 
 value_ptr operator()() const
-__MOZO_PHP_FUNCTOR_BODY_TPL(2, 0, )
+__BOOST_PHP_FUNCTOR_BODY_TPL(2, 0, )
 
-#undef __MOZO_PHP_FUNCTOR_TPL
+#undef __BOOST_PHP_FUNCTOR_TPL
 
 private:
     value name_;
     value_ptr object_;
     hashtable<value_ptr>* symtable_;
     hashtable< ::zend_function>* fun_table_;
-    MOZO_PHP_TSRM_MEMBER;
+    BOOST_PHP_TSRM_MEMBER;
 };
 
 } } // namespace boost::php
 
 
-#endif /* MOZO_PHP_FUNCTION_TEMPLATE_HPP */
+#endif /* BOOST_PHP_FUNCTION_TEMPLATE_HPP */

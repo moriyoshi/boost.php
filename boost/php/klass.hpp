@@ -25,8 +25,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#ifndef MOZO_PHP_KLASS_DEFINED
-#define MOZO_PHP_KLASS_DEFINED
+#ifndef BOOST_PHP_KLASS_DEFINED
+#define BOOST_PHP_KLASS_DEFINED
 #include <new>
 #include <cstddef>
 #include <cstdlib>
@@ -94,13 +94,13 @@ public:
 
     void fixup() {
         TSRMLS_FETCH();
-        MOZO_PHP_BEGIN_CAPTURE_ERROR
+        BOOST_PHP_BEGIN_CAPTURE_ERROR
         if (FAILURE == ::zend_register_functions(
                 this, *this,
                 &function_table, MODULE_PERSISTENT TSRMLS_CC)) {
-            throw runtime_error(MOZO_PHP_LAST_ERROR);
+            throw runtime_error(BOOST_PHP_LAST_ERROR);
         }
-        MOZO_PHP_END_CAPTURE_ERROR
+        BOOST_PHP_END_CAPTURE_ERROR
     }
 
     static void* operator new(std::size_t sz) {
@@ -184,10 +184,10 @@ void intrusive_ptr_release(::boost::php::klass<T_>* ptr)
 {
     ::destroy_zend_class(&ptr);
 }
-#endif /* MOZO_PHP_KLASS_DEFINED */
+#endif /* BOOST_PHP_KLASS_DEFINED */
 
-#ifndef MOZO_PHP_KLASS_STD_CONVERTER_DEFINED
-#define MOZO_PHP_KLASS_STD_CONVERTER_DEFINED
+#ifndef BOOST_PHP_KLASS_STD_CONVERTER_DEFINED
+#define BOOST_PHP_KLASS_STD_CONVERTER_DEFINED
 #include <boost/php/converter.hpp>
 
 namespace boost { namespace php {
@@ -214,4 +214,4 @@ struct to_native_converter<T_, false> {
 };
 
 } } // namespace boost::php
-#endif /* MOZO_PHP_KLASS_STD_CONVERTER_DEFINED */
+#endif /* BOOST_PHP_KLASS_STD_CONVERTER_DEFINED */

@@ -27,9 +27,9 @@ public:
     }
 };
 
-#define MOZO_PHP_MODULE_NAME m003
-#define MOZO_PHP_MODULE_CAPITALIZED_NAME M003
-#define MOZO_PHP_MODULE_VERSION "0.1"
-#define MOZO_PHP_MODULE_CLASS_NAME m003_module
+#define BOOST_PHP_MODULE_NAME m003
+#define BOOST_PHP_MODULE_CAPITALIZED_NAME M003
+#define BOOST_PHP_MODULE_VERSION "0.1"
+#define BOOST_PHP_MODULE_CLASS_NAME m003_module
 
 #include "boost/php/module_def.hpp"
