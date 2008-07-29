@@ -1,13 +1,14 @@
 #include "boost/php/module.hpp"
 #include "boost/php/function.hpp"
 #include "boost/php/klass.hpp"
+#include <boost/mpl/vector.hpp>
 #include <iostream>
 
 using namespace boost;
 
 class test {
 public:
-    test(): acc_(2) {
+    test(int initial): acc_(initial) {
     }
 
     int accumulate(int a) {
@@ -34,7 +35,7 @@ public:
             : php::module::handler(mod) {}
 
         void __initialize(TSRMLS_D) {
-            php::def_class<test>("test" TSRMLS_CC)
+            php::def_class<test>("test", boost::mpl::vector1<int>() TSRMLS_CC)
                 .defun("accumulate", &test::accumulate)
                 .defun("foo", &test::foo)
                 .fixup();

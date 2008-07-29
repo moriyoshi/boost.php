@@ -1,6 +1,6 @@
 <?php
-$test1 = new test();
-$test2 = new test();
+$test1 = new test(1);
+$test2 = new test(2);
 for ($i = 0; $i < 10; ++$i) {
     $test1->accumulate($i);
     test::foo($test1);
