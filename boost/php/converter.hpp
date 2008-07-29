@@ -39,33 +39,38 @@
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 
 namespace boost { namespace php {
 
 namespace detail {
     template<typename T_>
-    struct is_first_class
-        :
-        boost::mpl::or_<
-            boost::is_POD<T_>,
-            boost::mpl::or_<
-                boost::is_same<T_, ::std::string>,
+    struct is_first_class {
+    public:
+        typedef typename remove_pointer<
+            typename remove_cv<typename remove_reference<T_>::type>::type
+            >::type type;
+        enum {
+            value = boost::mpl::or_<
+                boost::is_POD<type>,
                 boost::mpl::or_<
-                    boost::is_same<T_, array>,
+                    boost::is_same<type, ::std::string>,
                     boost::mpl::or_<
-                        boost::is_same<T_, string>,
-                        boost::is_same<T_, resource_handle>
+                        boost::is_same<type, array>,
+                        boost::mpl::or_<
+                            boost::is_same<type, string>,
+                            boost::is_same<type, resource_handle>
+                        >
                     >
                 >
-            >
-        > {};
+            >::value
+        };
+    };
 }
 
 template<typename Tnative_, bool BisFirstClass_ = detail::is_first_class<Tnative_>::value>
-struct to_native_converter {
-    Tnative_ operator()(value_ptr const& TSRMLS_DC) const;
-    Tnative_& operator()(value_ptr& TSRMLS_DC) const;
-};
+struct to_native_converter {};
 
 template<>
 struct to_native_converter<long, true> {
@@ -183,14 +188,14 @@ inline value_ptr to_value_ptr(Tsrc_ const& val TSRMLS_DC)
 template<typename T_>
 inline T_ to_native(value_ptr const& val TSRMLS_DC)
 {
-    static to_native_converter<typename boost::remove_reference<T_>::type> converter;
+    static to_native_converter<typename boost::remove_cv<typename boost::remove_reference<T_>::type>::type> converter;
     return converter(val TSRMLS_CC);
 }
 
 template<typename T_>
 inline T_& to_native(value_ptr& val TSRMLS_DC)
 {
-    static to_native_converter<typename boost::remove_reference<T_>::type> converter;
+    static to_native_converter<typename boost::remove_cv<typename boost::remove_reference<T_>::type>::type> converter;
     return converter(val TSRMLS_CC);
 }
 } } // namespace boost::php
