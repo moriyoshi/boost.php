@@ -82,17 +82,10 @@ private:
         ::std::string retval;
         ::std::string::size_type s;
         BOOST_STATIC_ASSERT(sizeof(s) >= sizeof(int));
-        retval.reserve(16);
-        for (;;) {
-            // XXX: how come it returns size_type by int?
-            s = static_cast< ::std::string::size_type>(
-                vsnprintf(&retval[0], retval.capacity(), format, ap));
-            if (s < retval.capacity()) {
-                break;
-            }
-            retval.reserve(s + 1);
-            retval.resize(s);
-        }
+        char* buf;
+        retval.append(buf, static_cast< ::std::string::size_type>(
+                vspprintf(&buf, 0, format, ap)));
+        efree(buf);
         return retval;
     }
 
