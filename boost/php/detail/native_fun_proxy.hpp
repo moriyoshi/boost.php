@@ -117,7 +117,7 @@ public:
             typename Tsig_::object_type* obj = oretr_( \
                     INTERNAL_FUNCTION_PARAM_PASSTHRU); \
             ::std::size_t arity = Tsig_::arity_value::value; \
-            ::zend_uint num_params = *((zend_uintptr*)EG(argument_stack)->top_element - 2); \
+            ::zend_uint num_params = *((zend_uintptr*)zend_vm_stack_top(TSRMLS_C) - 1); \
             if (num_params < arity) { \
                 zend_error(E_WARNING, "too few arguments (expected %d, got %d)", arity, num_params); \
                 return; \
@@ -127,7 +127,7 @@ public:
                 return; \
             } \
             zval** params = reinterpret_cast<zval**>( \
-                    EG(argument_stack)->top - 1 - num_params ); \
+                    zend_vm_stack_top(TSRMLS_C) - 1 - num_params ); \
             try { \
                 __invoke__(__z__, __arity__, obj); \
             } catch (const ::boost::php::runtime_error& e) { \
