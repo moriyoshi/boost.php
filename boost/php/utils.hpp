@@ -82,8 +82,8 @@ callable_name_to_string(const ::boost::php::value& callable_zv TSRMLS_DC)
 #else
     char *_msg;
     if (!zend_is_callable_ex(&const_cast< ::boost::php::value&>(callable_zv),
-            IS_CALLABLE_CHECK_SYNTAX_ONLY, &callable_name,
-            &callable_name_len, NULL, NULL, NULL, &_msg TSRMLS_CC)) {
+            NULL, IS_CALLABLE_CHECK_SYNTAX_ONLY, &callable_name,
+            &callable_name_len, NULL, &_msg TSRMLS_CC)) {
         std::string msg(_msg);
         throw illegal_argument(_msg);
     }
