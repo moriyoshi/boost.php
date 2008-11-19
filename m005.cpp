@@ -21,6 +21,21 @@ public:
             }
         };
 
+        ::std::string array_explode(::std::string sep,
+                 const php::array& a) {
+            ::std::string retval;
+            php::array::const_iterator i(a.begin()), e(a.end());
+            if (i != e) {
+                for (;;) {
+                    retval += (std::string)*(*i).second;
+                    if (++i == e)
+                        break;
+                    retval += sep;
+                }
+            }
+            return retval;
+        }
+
         void array_iter(const php::array& a) {
             for (php::array::const_iterator i(a.begin()), e(a.end());
                     i != e; ++i) {
@@ -34,6 +49,7 @@ public:
     m005_module(zend_module_entry* entry)
         : php::module(entry) {
         entry->functions =
+             defun("array_explode", &handler::array_explode).
              defun("array_iter", &handler::array_iter);
     }
 };
