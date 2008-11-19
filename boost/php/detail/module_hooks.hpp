@@ -57,11 +57,13 @@ template<typename Tmod_>
 struct module_hooks
 {
     struct initializer {
+        virtual ~initializer() {}
         virtual void operator()(typename Tmod_::handler& mod TSRMLS_DC) = 0;
         initializer* next;
     };
 
     struct finalizer {
+        virtual ~finalizer() {}
         virtual void operator()(typename Tmod_::handler& mod TSRMLS_DC) = 0;
         finalizer* next;
     };
