@@ -83,7 +83,7 @@ public:
             typename Tsig_::object_type* obj = oretr_( \
                     INTERNAL_FUNCTION_PARAM_PASSTHRU); \
             ::std::size_t arity = Tsig_::arity_value::value; \
-            ::zend_uint num_params = *((zend_uint*)EG(argument_stack).top_element - 2); \
+            ::zend_uint num_params = *((zend_uintptr_t*)EG(argument_stack).top_element - 2); \
             if (num_params < arity) { \
                 zend_error(E_WARNING, "too few arguments (expected %d, got %d)", arity, num_params); \
                 return; \
@@ -117,7 +117,7 @@ public:
             typename Tsig_::object_type* obj = oretr_( \
                     INTERNAL_FUNCTION_PARAM_PASSTHRU); \
             ::std::size_t arity = Tsig_::arity_value::value; \
-            ::zend_uint num_params = *((zend_uint*)EG(argument_stack)->top - 1); \
+            ::zend_uint num_params = *((zend_uintptr*)EG(argument_stack)->top_element - 2); \
             if (num_params < arity) { \
                 zend_error(E_WARNING, "too few arguments (expected %d, got %d)", arity, num_params); \
                 return; \
