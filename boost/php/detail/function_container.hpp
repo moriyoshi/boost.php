@@ -94,7 +94,7 @@ public:
     }
 
     template<typename Tsig_>
-    function_entry const& define_function(
+    function_entry& define_function(
             ::std::string const& name, Tsig_ const& sig) {
         if (!handlers_) {
             handlers_ = new handler_map_type();
@@ -117,7 +117,7 @@ public:
     }
 
     template<typename Tfunc_>
-    function_entry const& define_function(
+    function_entry& define_function(
             ::std::string const& name, Tfunc_ f, bool) {
         return static_cast<T_*>(this)->define_function(name, detail::get_signature(f));
     }

@@ -73,10 +73,11 @@ public:
     }
 
     template<typename Tsig_>
-    function_entry const& define_function(
+    function_entry& define_function(
             ::std::string const& name, Tsig_ const& sig) {
-        function_entry const& retval =
+        function_entry& retval =
             function_container<klass>::define_function(name, sig);
+        retval.flags |= ZEND_ACC_PUBLIC;
         builtin_functions = *this;
         return retval;
     }
