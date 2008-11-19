@@ -45,7 +45,7 @@ public:
           message_(message) {}
 
     error_info(int type, const char* filename, const ::uint lineno,
-            const char* format, ::va_list ap)
+            const char* format, va_list ap)
         : type_(type), filename_(filename), line_number_(lineno),
           message_(format_message(format, ap)) {}
 
@@ -110,7 +110,7 @@ namespace detail {
     class error_captor {
     private:
         typedef void (*handler_type)(int, const char*, const ::uint,
-                const char*, ::va_list);
+                const char*, va_list);
     public:
         error_captor()
             : prev_(current_error_captor), old_handler_(::zend_error_cb) {
@@ -129,7 +129,7 @@ namespace detail {
         }
 
         static void capture_handler(int type, const char* filename,
-                const ::uint lineno, const char* format, ::va_list ap)
+                const ::uint lineno, const char* format, va_list ap)
         {
             current_error_captor->captured_ = error_info(
                     type, filename, lineno, format, ap);
