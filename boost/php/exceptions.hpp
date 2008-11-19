@@ -125,15 +125,15 @@ public:
 namespace boost { namespace php {
 
 inline runtime_error::runtime_error(const error_info& err)
-    : filename_(err.filename()), line_number_(err.line_number()),
-      ::std::runtime_error(err.message()) {}
+    : ::std::runtime_error(err.message()),
+      filename_(err.filename()), line_number_(err.line_number()) {}
 
 inline runtime_error::runtime_error(const ::std::string msg,
     const char* filename, const ::uint lineno)
-    : filename_(filename ? filename: utils::current_filename()),
+    : ::std::runtime_error(msg),
+      filename_(filename ? filename: utils::current_filename()),
       line_number_(filename ? lineno:
-            ::boost::php::utils::current_line_number()),
-      ::std::runtime_error(msg) {}
+            ::boost::php::utils::current_line_number()) {}
 
 } } // namespace boost::php
 

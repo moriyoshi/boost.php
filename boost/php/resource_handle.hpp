@@ -38,10 +38,12 @@ public:
 
     const resource_handle& operator=(long rhs) {
         value_ = rhs;
+        return *this;
     }
 
     const resource_handle& operator=(const resource_handle& rhs) {
         value_ = rhs.value_;
+        return *this;
     }
 
     operator long() const {

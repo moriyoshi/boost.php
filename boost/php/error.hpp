@@ -74,6 +74,7 @@ public:
         filename_ = rhs.filename_;
         line_number_ = rhs.line_number_;
         message_ = rhs.message_;
+        return *this;
     }
 
 private:
@@ -112,7 +113,7 @@ namespace detail {
                 const char*, ::va_list);
     public:
         error_captor()
-            : old_handler_(::zend_error_cb), prev_(current_error_captor) {
+            : prev_(current_error_captor), old_handler_(::zend_error_cb) {
 
             current_error_captor = this;
             ::zend_error_cb = &error_captor::capture_handler;

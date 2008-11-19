@@ -48,7 +48,7 @@ public:
         if (len == static_cast< ::std::size_t>(-1)) {
             len = ::strlen(val);
         }
-        BOOST_ASSERT(len <= ::std::numeric_limits<int>::max());
+        BOOST_ASSERT(len <= static_cast< ::std::size_t >(::std::numeric_limits<int>::max()));
         data_.str.val = val;
         data_.str.len = static_cast<int>(len);
     }
@@ -57,7 +57,7 @@ public:
         if (len == static_cast< ::std::size_t>(-1)) {
             len = ::strlen(val);
         }
-        BOOST_ASSERT(len <= ::std::numeric_limits<int>::max());
+        BOOST_ASSERT(len <= static_cast< ::std::size_t >(::std::numeric_limits<int>::max()));
         data_.str.val = ::estrndup(val, len);
         data_.str.len = static_cast<int>(len);
     }
@@ -105,6 +105,7 @@ public:
         string tmp(rhs);
         swap(*this);
         tmp.release();
+        return *this;
     }
 
     void swap(string& that) {

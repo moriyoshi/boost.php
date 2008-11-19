@@ -167,6 +167,7 @@ extern "C" { \
             zend_error(E_WARNING, const_cast<char*>("%s"), e.what()); \
             return FAILURE; \
         } \
+        return SUCCESS; \
     }
 
 #define BOOST_PHP_DECLARE_MSHUTDOWN_FUNCTION(__mod_name__) \
