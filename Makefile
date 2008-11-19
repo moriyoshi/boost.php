@@ -1,63 +1,51 @@
+#!/bin/make
+
+# The prefix of your PHP installation. Leave it blank for auto-detection.
+PHP_ROOT=
+
+# System config
 CXX=g++
 LD=g++
-PHP_HOME=$(HOME)/opt/php-5.2
-BOOST_HOME=$(HOME)/Sources/boost_1_35_0
-PHP_CONFIG=$(PHP_HOME)/bin/php-config
+CPPFLAGS=
+CXXFLAGS=
+LDFLAGS=
+
+# Objects to be built by default
+TARGETS=m001.so m002.so m003.so m004.so m005.so m006.so m007.so m008.so
+
+# Check if we system-wide php-config is available, or should we stay compatible
+# with initial makefile
+PHP_CONFIG=$(shell $(if $(PHP_ROOT),PATH="$(PHP_ROOT)/bin:$$PATH",) which 2>/dev/null php-config)
+ifeq ($(PHP_CONFIG),)
+$(error Could not find PHP, make sure you have php-config in PATH!)
+endif
+
+# Find out some stuff
 PHP_INCLUDES=$(shell $(PHP_CONFIG) --includes)
-BOOST_INCLUDES=-I$(BOOST_HOME)
-CPPFLAGS=-I. $(PHP_INCLUDES) $(BOOST_INCLUDES)
-CXXFLAGS=-g
-LDFLAGS:=$(if $(shell uname | grep "Darwin"),  -bundle -undefined dynamic_lookup, -shared)
+PHP_LDFLAGS=$(shell $(PHP_CONFIG) --ldflags)
 
-all: m001.so m002.so m003.so m004.so m005.so m006.so m007.so m008.so
+# Initialize variables
+CPPFLAGS+=-I. $(PHP_INCLUDES)
+CXXFLAGS+=-g -pipe -Wall
 
-m001.o: m001.cpp
-	$(CXX) -DCOMPILE_DL_M001 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+# PIC should be ignored if the arch doesn't need it. 
+CXXFLAGS+=-fPIC -DPIC
 
-m001.so: m001.o
-	$(LD) $(LDFLAGS) -o $@ $^
+# This one is also to stay compatible with initial makefile
+ifneq ($(wildcard $(HOME)/Sources/boost_1_35_0),)
+CPPFLAGS+=-I$(HOME)/Sources/boost_1_35_0
+endif
 
-m002.o: m002.cpp
-	$(CXX) -DCOMPILE_DL_M002 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+# Darwin's way of building shared libs
+LDFLAGS+=$(if $(shell uname | grep "Darwin"),  -bundle -undefined dynamic_lookup, -shared)
 
-m002.so: m002.o
-	$(LD) $(LDFLAGS) -o $@ $^
+all: $(TARGETS)
 
-m003.o: m003.cpp
-	$(CXX) -DCOMPILE_DL_M003 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+m%.o: m%.cpp
+	$(CXX) -DCOMPILE_DL_M$* $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-m003.so: m003.o
-	$(LD) $(LDFLAGS) -o $@ $^
-
-m004.o: m004.cpp
-	$(CXX) -DCOMPILE_DL_M004 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-m004.so: m004.o
-	$(LD) $(LDFLAGS) -o $@ $^
-
-m005.o: m005.cpp
-	$(CXX) -DCOMPILE_DL_M005 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-m005.so: m005.o
-	$(LD) $(LDFLAGS) -o $@ $^
-
-m006.o: m006.cpp
-	$(CXX) -DCOMPILE_DL_M006 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-m006.so: m006.o
-	$(LD) $(LDFLAGS) -o $@ $^
-
-m007.o: m007.cpp
-	$(CXX) -DCOMPILE_DL_M007 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-m007.so: m007.o
-	$(LD) $(LDFLAGS) -o $@ $^
-
-m008.o: m008.cpp
-	$(CXX) -DCOMPILE_DL_M008 $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-m008.so: m008.o
-	$(LD) $(LDFLAGS) -o $@ $^
+m%.so: m%.o
+	$(LD) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 clean:
 	rm -f *.o
@@ -65,3 +53,4 @@ clean:
 
 .PHONY: clean all
 .SUFFIXES: .o .cpp .so
+
