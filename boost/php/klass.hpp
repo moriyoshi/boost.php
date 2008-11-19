@@ -90,6 +90,7 @@ public:
         constructor = &(
                 *(--reinterpret_cast<hashtable< ::zend_function>&>(
                         function_table).end())).second;
+        return *this;
     }
 
     void fixup() {
