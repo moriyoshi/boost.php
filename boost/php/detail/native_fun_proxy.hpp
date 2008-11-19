@@ -83,13 +83,13 @@ public:
             typename Tsig_::object_type* obj = oretr_( \
                     INTERNAL_FUNCTION_PARAM_PASSTHRU); \
             ::std::size_t arity = Tsig_::arity_value::value; \
-            ::zend_uint num_params = *((zend_uintptr_t*)EG(argument_stack).top_element - 2); \
+            ::zend_uintptr_t num_params = *((zend_uintptr_t*)EG(argument_stack).top_element - 2); \
             if (num_params < arity) { \
-                zend_error(E_WARNING, "too few arguments (expected %d, got %d)", arity, num_params); \
+                zend_error(E_WARNING, "too few arguments (expected %u, got %lu)", static_cast< ::zend_uint>(arity), num_params); \
                 return; \
             } \
             if (num_params > arity) { \
-                zend_error(E_WARNING, "too many arguments (expected %d, got %d)", arity, num_params); \
+                zend_error(E_WARNING, "too many arguments (expected %u, got %lu)", static_cast< ::zend_uint>(arity), num_params); \
                 return; \
             } \
             zval** params = reinterpret_cast<zval**>( \
@@ -117,13 +117,13 @@ public:
             typename Tsig_::object_type* obj = oretr_( \
                     INTERNAL_FUNCTION_PARAM_PASSTHRU); \
             ::std::size_t arity = Tsig_::arity_value::value; \
-            ::zend_uint num_params = *((zend_uintptr*)zend_vm_stack_top(TSRMLS_C) - 1); \
+            ::zend_uintptr_t num_params = *((zend_uintptr_t*)zend_vm_stack_top(TSRMLS_C) - 1); \
             if (num_params < arity) { \
-                zend_error(E_WARNING, "too few arguments (expected %d, got %d)", arity, num_params); \
+                zend_error(E_WARNING, "too few arguments (expected %u, got %lu)", static_cast< ::zend_uint>(arity), num_params); \
                 return; \
             } \
             if (num_params > arity) { \
-                zend_error(E_WARNING, "too many arguments (expected %d, got %d)", arity, num_params); \
+                zend_error(E_WARNING, "too many arguments (expected %u, got %lu)", static_cast< ::zend_uint>(arity), num_params); \
                 return; \
             } \
             zval** params = reinterpret_cast<zval**>( \
