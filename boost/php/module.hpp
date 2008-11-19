@@ -185,8 +185,15 @@ public:
         module const* const module_;
     };
 
+protected:
+    zend_module_entry* entry_;
+
 public:
-    module(zend_module_entry* entry) {}
+    module(zend_module_entry* entry): entry_(entry) {}
+
+    ~module() {
+        detail::cleanup_zend_module_entry(entry_);
+    }
 };
 
 } } // namespace boost::php
