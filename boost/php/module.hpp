@@ -148,7 +148,6 @@ namespace detail {
     {
         delete[] entry->ini_entry;
         delete[] entry->deps; 
-        delete[] entry->functions;
     }
 
     template<typename T_>
