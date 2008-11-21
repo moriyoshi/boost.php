@@ -10,12 +10,11 @@ CPPFLAGS=
 CXXFLAGS=
 LDFLAGS=
 
-# Objects to be built by default
-TARGETS=m001.so m002.so m003.so m004.so m005.so m006.so m007.so m008.so
-
 # Check if we system-wide php-config is available, or should we stay compatible
 # with initial makefile
 PHP_CONFIG=$(shell $(if $(PHP_ROOT),PATH="$(PHP_ROOT)/bin:$$PATH",) which 2>/dev/null php-config)
+PHP_BINARY=$(shell $(if $(PHP_ROOT),PATH="$(PHP_ROOT)/bin:$$PATH",) which 2>/dev/null php)
+PHP_TEST=$(shell find $(shell $(PHP_CONFIG) --prefix) -name run-tests.php)
 ifeq ($(PHP_CONFIG),)
 $(error Could not find PHP, make sure you have php-config in PATH!)
 endif
@@ -39,18 +38,22 @@ endif
 # Darwin's way of building shared libs
 LDFLAGS+=$(if $(shell uname | grep "Darwin"),  -bundle -undefined dynamic_lookup, -shared)
 
-all: $(TARGETS)
+all: $(patsubst %.cpp, %.so, $(wildcard tests/*.cpp))
 
-m%.o: m%.cpp
+tests/m%.o: tests/m%.cpp
 	$(CXX) -DCOMPILE_DL_M$* $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-m%.so: m%.o
+tests/m%.so: tests/m%.o
 	$(LD) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
-clean:
-	rm -f *.o
-	rm -f *.so
+# invoke PHP for each target (may not work if your php installation is too "deep")
+test: $(TARGETS)
+	TEST_PHP_EXECUTABLE="$(PHP_BINARY)" $(PHP_BINARY) $(PHP_TEST) -n -d extension_dir=`pwd`/tests tests
 
-.PHONY: clean all
+clean:
+	rm -f tests/*.o
+	rm -f tests/*.so
+
+.PHONY: clean all test
 .SUFFIXES: .o .cpp .so
 
