@@ -96,7 +96,7 @@ public:
         if (nKeyLength == 0) {
             return ::boost::lexical_cast< ::std::string>(h);
         } else {
-            return ::std::string(arKey, nKeyLength);
+            return ::std::string(arKey, nKeyLength - 1);
         }
     }
 private:
