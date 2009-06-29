@@ -31,6 +31,12 @@
 #include <boost/php/detail/object_retriever.hpp>
 #include <boost/php/detail/module_hooks.hpp>
 
+#if ZEND_MODULE_API_NO < 20090115
+#define BOOST_PHP_MODULE_BUILD_ID
+#else
+#define BOOST_PHP_MODULE_BUILD_ID , ZEND_MODULE_BUILD_ID
+#endif
+
 #define BOOST_PHP_ADD_MODULE_VARIATION(__mod_name__) \
     namespace boost { namespace php { namespace _ { \
         struct __mod_name__ {}; \
@@ -86,7 +92,7 @@ extern "C" { \
         NULL, \
         NULL, \
         &BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
-        0, 0, NULL, 0 \
+        0, 0, NULL, 0 BOOST_PHP_MODULE_BUILD_ID \
     }
 
 #define BOOST_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
@@ -144,7 +150,7 @@ extern "C" { \
         NULL, \
         NULL, \
         &BOOST_PHP_MODULE_POST_RSHUTDOWN_FUNC(__mod_name__), \
-        0, 0, NULL, 0 \
+        0, 0, NULL, 0 BOOST_PHP_MODULE_BUILD_ID \
     }
 
 #define BOOST_PHP_DECLARE_MODULE_SLOT(__mod_name__) \
