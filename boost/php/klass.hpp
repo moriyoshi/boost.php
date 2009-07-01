@@ -30,32 +30,162 @@
 #include <new>
 #include <cstddef>
 #include <cstdlib>
+#include <stdexcept>
 #include <zend_API.h>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/php/detail/function_template.hpp>
 #include <boost/php/detail/function_container.hpp>
 #include <boost/php/detail/object_retriever.hpp>
 #include <boost/php/object.hpp>
 #include <boost/php/exceptions.hpp>
-#include <iostream>
 
 namespace boost { namespace php {
 
+template<typename T_, typename Tnoncopyable_>
+class klass;
+
 template<typename T_>
-class klass: public ::zend_class_entry, public function_container<klass<T_> > {
+struct klass_registry
+{
+    static klass<T_, void>* value;
+};
+
+template<typename T_>
+klass<T_, void>* klass_registry<T_>::value(0);
+
+struct klass_base {
+protected:
+    template<typename T_>
+    class zo_wrapper_base: public sensible_object {
+    public:
+        typedef T_ object_type;
+        typedef boost::shared_ptr<object_type> shared_pointer;
+
+        zo_wrapper_base(zend_class_entry const& ce TSRMLS_DC)
+            : sensible_object(ce TSRMLS_CC),
+              type(INSTANCE), ptr(reinterpret_cast<object_type*>(instance)),
+              destroy_handler(&instance_destructor) {}
+
+        zo_wrapper_base(zend_class_entry const& ce, object_type* _ptr,
+                void(*_destroy_handler)(object_type* TSRMLS_DC) = noop_destructor
+                TSRMLS_DC)
+            : sensible_object(ce TSRMLS_CC), type(WEAKREF), ptr(_ptr),
+              destroy_handler(_destroy_handler) {}
+
+        zo_wrapper_base(zend_class_entry const& ce,
+                shared_pointer const& _ptr TSRMLS_DC)
+            : sensible_object(ce TSRMLS_CC), type(REF),
+              ptr((new (ref) shared_pointer(_ptr))->get()) {}
+
+    private:    
+        static void instance_destructor(object_type* ptr TSRMLS_DC)
+        {
+            ptr->~object_type();
+        }
+
+        static void noop_destructor(object_type* ptr TSRMLS_DC)
+        {
+        }
+
+    public:
+        enum { WEAKREF, INSTANCE, REF } type:2;
+
+        object_type* ptr;
+        void (*destroy_handler)(object_type* TSRMLS_DC);
+
+        union {
+            unsigned char instance[sizeof(object_type)];
+            unsigned char ref[sizeof(shared_pointer)];
+        };
+    };
+
+    template<typename T_, typename Tnoncopyable_>
+    struct zo_wrapper_tpl: public zo_wrapper_base<T_> {
+        typedef T_ object_type;
+        typedef zo_wrapper_base<T_> base_type;
+        typedef typename base_type::shared_pointer shared_pointer;
+
+        zo_wrapper_tpl(zend_class_entry const& ce TSRMLS_DC)
+            : base_type(ce TSRMLS_CC) {}
+
+        zo_wrapper_tpl(zo_wrapper_tpl const& that TSRMLS_DC)
+            : base_type(*that.ce TSRMLS_CC) {
+            this->type = that.type;
+            this->destroy_handler = that.destroy_handler;
+            switch (that.type) {
+            case base_type::WEAKREF:
+                this->ptr = that.ptr;
+                break;
+            case base_type::INSTANCE:
+                this->ptr = new (this->instance) object_type(
+                    *reinterpret_cast<object_type const*>(that.instance));
+                break;
+            case base_type::REF:
+                this->ptr = (new (this->ref) shared_pointer(
+                    *reinterpret_cast<shared_pointer const*>(that.ref)))->get();
+                break;
+            }
+        }
+
+        zo_wrapper_tpl(zend_class_entry const& ce, object_type* ptr,
+                void(*destroy_handler)(object_type* TSRMLS_DC) = 0 TSRMLS_DC)
+            : base_type(ce, ptr, destroy_handler TSRMLS_CC) {}
+
+        zo_wrapper_tpl(zend_class_entry const& ce,
+                shared_pointer ptr TSRMLS_DC)
+            : base_type(ce, ptr TSRMLS_CC) {}
+    };
+};
+
+template<typename T_>
+struct klass_base::zo_wrapper_tpl<T_, boost::noncopyable> {
+    typedef T_ object_type;
+    typedef zo_wrapper_base<T_> base_type;
+    typedef typename base_type::shared_pointer shared_pointer;
+
+    zo_wrapper_tpl(zend_class_entry const& ce TSRMLS_DC)
+        : base_type(ce TSRMLS_CC) {}
+
+    zo_wrapper_tpl(zo_wrapper_tpl const& that TSRMLS_DC)
+        : base_type(*that.ce TSRMLS_CC) {
+        this->type = that.type;
+        this->destroy_handler = that.destroy_handler;
+        switch (that.type) {
+        case base_type::WEAKREF:
+            this->ptr = that.ptr;
+            break;
+        case base_type::INSTANCE:
+            throw ::std::runtime_error(
+                "underlying object is not copy-constructible");
+            break;
+        case base_type::REF:
+            this->ptr = (new (this->ref) shared_pointer(
+                *reinterpret_cast<shared_pointer const*>(that.ref)))->get();
+            break;
+        }
+    }
+
+    zo_wrapper_tpl(zend_class_entry const& ce, object_type* ptr,
+            void(*destroy_handler)(object_type* TSRMLS_DC) = 0 TSRMLS_DC)
+        : zo_wrapper_base<T_>(ce, ptr, destroy_handler TSRMLS_CC) {}
+
+    zo_wrapper_tpl(zend_class_entry const& ce,
+            shared_pointer ptr TSRMLS_DC)
+        : base_type(ce, ptr TSRMLS_CC) {}
+};
+
+template<typename T_, typename Tnoncopyable_ = void>
+class klass: public ::zend_class_entry, public function_container<klass<T_> >, public klass_base {
     friend class object_retriever<T_>;
     friend class to_native_converter<T_, false>;
+    friend struct to_value_ptr_converter<T_*, false>;
+    friend struct to_value_ptr_converter<T_&, false>;
 public:
     typedef T_ object_type;
-
-protected:
-    struct zo_wrapper: public sensible_object {
-        zo_wrapper(zend_class_entry const& ce TSRMLS_DC)
-            : sensible_object(ce TSRMLS_CC), data_initialized(true /* XXX */) {}
-
-        bool data_initialized;
-        unsigned char data[sizeof(object_type)];
-    };
+    typedef zo_wrapper_tpl<object_type, Tnoncopyable_> zo_wrapper;
+    friend struct to_value_ptr_converter<typename zo_wrapper::shared_pointer, false>;
 
 public:
     klass(char const* _name) {
@@ -132,9 +262,65 @@ private:
         return retval;
     }
 
+    static ::zend_object_value __ptr_factory(klass* self, object_type *ptr, void(*destroy_handler)(object_type* TSRMLS_DC) TSRMLS_DC) {
+        zend_object_value retval;
+
+        zo_wrapper* obj = new zo_wrapper(*self, ptr, destroy_handler TSRMLS_CC);
+        obj->handle = retval.handle = ::zend_objects_store_put(obj,
+                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
+                reinterpret_cast< ::zend_objects_free_object_storage_t>(
+                    &__delete_wrapper),
+                reinterpret_cast< ::zend_objects_store_clone_t>(
+                    &__cctor_wrapper)
+                TSRMLS_CC);
+        retval.handlers = ::zend_get_std_object_handlers();
+        return retval;
+    }
+
+    static void __deleter(object_type* ptr TSRMLS_DC)
+    {
+        delete ptr;
+    }
+
+    static ::zend_object_value __weakref_factory(klass* self, object_type* ptr, void(*destroy_handler)(object_type* TSRMLS_DC) = 0 TSRMLS_DC) {
+        zend_object_value retval;
+
+        zo_wrapper* obj = new zo_wrapper(*self, ptr, destroy_handler TSRMLS_CC);
+        obj->handle = retval.handle = ::zend_objects_store_put(obj,
+                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
+                reinterpret_cast< ::zend_objects_free_object_storage_t>(
+                    &__delete_wrapper),
+                reinterpret_cast< ::zend_objects_store_clone_t>(
+                    &__cctor_wrapper)
+                TSRMLS_CC);
+        retval.handlers = ::zend_get_std_object_handlers();
+        return retval;
+    }
+
+    static ::zend_object_value __ref_factory(klass* self, typename zo_wrapper::shared_pointer ptr TSRMLS_DC) {
+        zend_object_value retval;
+
+        zo_wrapper* obj = new zo_wrapper(*self, ptr TSRMLS_CC);
+        obj->handle = retval.handle = ::zend_objects_store_put(obj,
+                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
+                reinterpret_cast< ::zend_objects_free_object_storage_t>(
+                    &__delete_wrapper),
+                reinterpret_cast< ::zend_objects_store_clone_t>(
+                    &__cctor_wrapper)
+                TSRMLS_CC);
+        retval.handlers = ::zend_get_std_object_handlers();
+        return retval;
+    }
+
+
     static void __dtor_wrapper(zo_wrapper* obj TSRMLS_DC) {
-        if (obj->data_initialized)
-            reinterpret_cast<object_type*>(obj->data)->~object_type();
+        if (obj->type) {
+            typedef typename zo_wrapper::shared_pointer shared_pointer;
+            reinterpret_cast<shared_pointer*>(obj->ref)->~shared_pointer();
+        } else {
+            if (obj->destroy_handler)
+                obj->destroy_handler(obj->ptr TSRMLS_CC);  
+        }
     }
 
     static void __delete_wrapper(zo_wrapper* obj TSRMLS_DC) {
@@ -142,16 +328,17 @@ private:
     }
 
     static void __cctor_wrapper(zo_wrapper* obj, zo_wrapper** cloned_obj TSRMLS_DC) {
-        *cloned_obj = new zo_wrapper(*obj);
+        *cloned_obj = new zo_wrapper(*obj TSRMLS_CC);
     }
 };
 
 template<typename T_>
 T_* object_retriever<T_>::operator()(INTERNAL_FUNCTION_PARAMETERS) const
 {
-    return reinterpret_cast<T_*>(
-            reinterpret_cast<typename klass<T_>::zo_wrapper*>(
-                ::zend_objects_get_address(this_ptr TSRMLS_CC))->data);
+    typedef typename klass<T_>::zo_wrapper wrapper_type;
+    wrapper_type* w = reinterpret_cast<wrapper_type*>(
+            ::zend_objects_get_address(this_ptr TSRMLS_CC));
+    return w->ptr;
 }
 
 template<typename T_, typename Tctor_args_>
@@ -164,6 +351,7 @@ static klass<T_>& def_class(char const* name, Tctor_args_ args TSRMLS_DC)
     ::zend_str_tolower_copy(lowercased_name, retval->name, retval->name_length);
     ::zend_hash_update(CG(class_table), lowercased_name, retval->name_length + 1,
             &retval, sizeof(zend_class_entry*), NULL);
+    klass_registry<T_>::value = retval;
     return *retval;
 }
 
@@ -197,21 +385,51 @@ namespace boost { namespace php {
 template<typename T_>
 struct to_native_converter<T_, false> {
     T_ const& operator()(value_ptr const& val TSRMLS_DC) const {
-        return *reinterpret_cast<T_ const*>(
-                reinterpret_cast<typename klass<T_>::zo_wrapper const*>(
+        return (*this)(const_cast<value_ptr&>(val));
+    }
+
+    T_& operator()(value_ptr& val TSRMLS_DC) const {
+        return *reinterpret_cast<typename klass<T_>::zo_wrapper*>(
                     zend_objects_get_address(
                         const_cast< ::zval*>(
                             static_cast< ::zval const*>(
                                 val.as<value::_OBJECT>()))
-                        TSRMLS_CC))->data);
+                        TSRMLS_CC))->ptr;
     }
+};
 
-    T_& operator()(value_ptr& val TSRMLS_DC) const {
-        return *reinterpret_cast<T_*>(
-                reinterpret_cast<typename klass<T_>::zo_wrapper*>(
-                    zend_objects_get_address(
-                        static_cast< ::zval*>(val.as<value::_OBJECT>())
-                        TSRMLS_CC))->data);
+template<typename T_>
+struct to_value_ptr_converter<T_*, false> {
+    value_ptr operator()(T_* val TSRMLS_DC) const {
+        return value_ptr(new value(klass<T_>::__weakref_factory(klass_registry<T_>::value, val, klass<T_>::__deleter)), false);
+    }
+};
+
+template<typename T_>
+struct to_value_ptr_converter<T_ const*, false> {
+    value_ptr operator()(T_ const* val TSRMLS_DC) const {
+        return to_value_ptr_converter<T_*, false>()(const_cast<T_*>(val) TSRMLS_CC);
+    }
+};
+
+template<typename T_>
+struct to_value_ptr_converter<T_&, false> {
+    value_ptr operator()(T_& val TSRMLS_DC) const {
+        return value_ptr(new value(klass<T_>::__weakref_factory(klass_registry<T_>::value, &val)), false);
+    }
+};
+
+template<typename T_>
+struct to_value_ptr_converter<T_ const&, false> {
+    value_ptr operator()(T_ const& val TSRMLS_DC) const {
+        return to_value_ptr_converter<T_&, false>()(const_cast<T_&>(val) TSRMLS_CC);
+    }
+};
+
+template<typename T_>
+struct to_value_ptr_converter<boost::shared_ptr<T_>, false> {
+    value_ptr operator()(boost::shared_ptr<T_> const& val TSRMLS_DC) const {
+        return value_ptr(new value(klass<T_>::__ref_factory(klass_registry<T_>::value, val)), false);
     }
 };
 

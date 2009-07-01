@@ -70,7 +70,7 @@ namespace detail {
 }
 
 template<typename Tnative_, bool BisFirstClass_ = detail::is_first_class<Tnative_>::value>
-struct to_native_converter {};
+struct to_native_converter;
 
 template<>
 struct to_native_converter<long, true> {
@@ -136,8 +136,11 @@ struct to_native_converter<resource_handle, true> {
 #define BOOST_PHP_TO_VALUE_PTR_CONVERTER_DEFINED
 namespace boost { namespace php {
 
+template<typename Tnative_, bool BisFirstClass_ = detail::is_first_class<Tnative_>::value>
+struct to_value_ptr_converter;
+
 template<typename Tnative_>
-struct to_value_ptr_converter {
+struct to_value_ptr_converter<Tnative_, true> {
     value_ptr operator()(const Tnative_& val TSRMLS_DC) const {
         return value_ptr(new value(val), false);
     }

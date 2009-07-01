@@ -5,7 +5,7 @@ m008: C++/PHP classes
 extension=m008.so
 --FILE--
 <?php
-$test1 = new test(1);
+$test1 = test::create(1);
 $test2 = new test(2);
 for ($i = 0; $i < 10; ++$i) {
     $test1->accumulate($i);

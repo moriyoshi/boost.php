@@ -2,6 +2,7 @@
 #include "boost/php/function.hpp"
 #include "boost/php/klass.hpp"
 #include <boost/mpl/vector.hpp>
+#include <boost/shared_ptr.hpp>
 #include <iostream>
 
 using namespace boost;
@@ -20,6 +21,15 @@ public:
         std::cout << t.acc_ << std::endl;
     }
 
+    static boost::shared_ptr<test> create(int initial) {
+        return boost::shared_ptr<test>(new test(initial));
+    }
+
+/*
+    static boost::shared_ptr<test> create(int initial) {
+        return boost::shared_ptr<test>(new test(initial));
+    }
+*/
 protected:
     int acc_;
 };
@@ -38,6 +48,7 @@ public:
             php::def_class<test>("test", boost::mpl::vector1<int>() TSRMLS_CC)
                 .defun("accumulate", &test::accumulate)
                 .defun("foo", &test::foo)
+                .defun("create", &test::create)
                 .fixup();
         }
     };
