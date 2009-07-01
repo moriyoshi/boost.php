@@ -26,8 +26,8 @@ public:
     }
 
 /*
-    static boost::shared_ptr<test> create(int initial) {
-        return boost::shared_ptr<test>(new test(initial));
+    static test* create(int initial) {
+        return new test(initial);
     }
 */
 protected:
