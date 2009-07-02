@@ -17,6 +17,10 @@ public:
         return acc_;
     }
 
+    test& self() {
+        return *this;
+    }
+
     static void foo(test const& t) {
         std::cout << t.acc_ << std::endl;
     }
@@ -48,6 +52,7 @@ public:
             php::def_class<test>("test", boost::mpl::vector1<int>() TSRMLS_CC)
                 .defun("accumulate", &test::accumulate)
                 .defun("foo", &test::foo)
+                .defun("self", &test::self)
                 .defun("create", &test::create)
                 .fixup();
         }

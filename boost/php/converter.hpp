@@ -36,6 +36,8 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/call_traits.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -141,7 +143,7 @@ struct to_value_ptr_converter;
 
 template<typename Tnative_>
 struct to_value_ptr_converter<Tnative_, true> {
-    value_ptr operator()(const Tnative_& val TSRMLS_DC) const {
+    value_ptr operator()(Tnative_ const& val TSRMLS_DC) const {
         return value_ptr(new value(val), false);
     }
 };
@@ -168,6 +170,13 @@ struct to_value_ptr_converter<value_ptr> {
 };
 
 template<>
+struct to_value_ptr_converter<value_ptr&> {
+    value_ptr operator()(value_ptr that TSRMLS_DC) const {
+        return value_ptr(that);
+    }
+};
+
+template<>
 struct to_value_ptr_converter<value_ptr const&> {
     value_ptr operator()(value_ptr const& that TSRMLS_DC) const {
         return value_ptr(that);
@@ -185,6 +194,13 @@ template<typename Tsrc_>
 inline value_ptr to_value_ptr(Tsrc_ const& val TSRMLS_DC)
 {
     static to_value_ptr_converter<Tsrc_> converter;
+    return converter(val TSRMLS_CC);
+}
+
+template<typename Tsrc_>
+inline value_ptr to_value_ptr(Tsrc_& val TSRMLS_DC, typename boost::disable_if<detail::is_first_class<Tsrc_> >::type* = 0)
+{
+    static to_value_ptr_converter<Tsrc_&> converter;
     return converter(val TSRMLS_CC);
 }
 
