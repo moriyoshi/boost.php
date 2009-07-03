@@ -35,6 +35,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/vector.hpp>
+#include <boost/unordered/unordered_map.hpp>
 #include <boost/php/detail/function_template.hpp>
 #include <boost/php/detail/function_container.hpp>
 #include <boost/php/detail/object_retriever.hpp>
@@ -187,6 +188,9 @@ public:
     typedef zo_wrapper_tpl<object_type, Tnoncopyable_> zo_wrapper;
     friend struct to_value_ptr_converter<typename zo_wrapper::shared_pointer, false>;
 
+private:
+    typedef boost::unordered_map<object_type*, ::zend_object_handle> instance_handle_map;
+
 public:
     klass(char const* _name) {
         TSRMLS_FETCH();
@@ -262,21 +266,6 @@ private:
         return retval;
     }
 
-    static ::zend_object_value __ptr_factory(klass* self, object_type *ptr, void(*destroy_handler)(object_type* TSRMLS_DC) TSRMLS_DC) {
-        zend_object_value retval;
-
-        zo_wrapper* obj = new zo_wrapper(*self, ptr, destroy_handler TSRMLS_CC);
-        obj->handle = retval.handle = ::zend_objects_store_put(obj,
-                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
-                reinterpret_cast< ::zend_objects_free_object_storage_t>(
-                    &__delete_wrapper),
-                reinterpret_cast< ::zend_objects_store_clone_t>(
-                    &__cctor_wrapper)
-                TSRMLS_CC);
-        retval.handlers = ::zend_get_std_object_handlers();
-        return retval;
-    }
-
     static void __deleter(object_type* ptr TSRMLS_DC)
     {
         delete ptr;
@@ -285,14 +274,22 @@ private:
     static ::zend_object_value __weakref_factory(klass* self, object_type* ptr, void(*destroy_handler)(object_type* TSRMLS_DC) = 0 TSRMLS_DC) {
         zend_object_value retval;
 
-        zo_wrapper* obj = new zo_wrapper(*self, ptr, destroy_handler TSRMLS_CC);
-        obj->handle = retval.handle = ::zend_objects_store_put(obj,
-                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
-                reinterpret_cast< ::zend_objects_free_object_storage_t>(
-                    &__delete_wrapper),
-                reinterpret_cast< ::zend_objects_store_clone_t>(
-                    &__cctor_wrapper)
-                TSRMLS_CC);
+        typename instance_handle_map::const_iterator i(weakref_handle_map_.find(ptr));
+        if (weakref_handle_map_.end() != i) {
+            retval.handle = (*i).second;
+            zend_objects_store_add_ref_by_handle(retval.handle TSRMLS_CC);
+        } else {
+            zo_wrapper* obj = new zo_wrapper(*self, ptr, destroy_handler TSRMLS_CC);
+            retval.handle = obj->handle = ::zend_objects_store_put(obj,
+                    reinterpret_cast< ::zend_objects_store_dtor_t>(
+                        &__dtor_wrapper),
+                    reinterpret_cast< ::zend_objects_free_object_storage_t>(
+                        &__delete_wrapper),
+                    reinterpret_cast< ::zend_objects_store_clone_t>(
+                        &__cctor_wrapper)
+                    TSRMLS_CC);
+            weakref_handle_map_.insert(std::make_pair(ptr, retval.handle));
+        }
         retval.handlers = ::zend_get_std_object_handlers();
         return retval;
     }
@@ -300,14 +297,22 @@ private:
     static ::zend_object_value __ref_factory(klass* self, typename zo_wrapper::shared_pointer ptr TSRMLS_DC) {
         zend_object_value retval;
 
-        zo_wrapper* obj = new zo_wrapper(*self, ptr TSRMLS_CC);
-        obj->handle = retval.handle = ::zend_objects_store_put(obj,
-                reinterpret_cast< ::zend_objects_store_dtor_t>(&__dtor_wrapper),
-                reinterpret_cast< ::zend_objects_free_object_storage_t>(
-                    &__delete_wrapper),
-                reinterpret_cast< ::zend_objects_store_clone_t>(
-                    &__cctor_wrapper)
-                TSRMLS_CC);
+        typename instance_handle_map::const_iterator i(ref_handle_map_.find(ptr.get()));
+        if (ref_handle_map_.end() != i) {
+            retval.handle = (*i).second;
+            zend_objects_store_add_ref_by_handle(retval.handle TSRMLS_CC);
+        } else {
+            zo_wrapper* obj = new zo_wrapper(*self, ptr TSRMLS_CC);
+            retval.handle = obj->handle = ::zend_objects_store_put(obj,
+                    reinterpret_cast< ::zend_objects_store_dtor_t>(
+                        &__dtor_wrapper),
+                    reinterpret_cast< ::zend_objects_free_object_storage_t>(
+                        &__delete_wrapper),
+                    reinterpret_cast< ::zend_objects_store_clone_t>(
+                        &__cctor_wrapper)
+                    TSRMLS_CC);
+            ref_handle_map_.insert(std::make_pair(ptr.get(), retval.handle));
+        }
         retval.handlers = ::zend_get_std_object_handlers();
         return retval;
     }
@@ -315,9 +320,12 @@ private:
 
     static void __dtor_wrapper(zo_wrapper* obj TSRMLS_DC) {
         if (obj->type == zo_wrapper::REF) {
+            ref_handle_map_.erase(obj->ptr);
             typedef typename zo_wrapper::shared_pointer shared_pointer;
             reinterpret_cast<shared_pointer*>(obj->ref)->~shared_pointer();
         } else {
+            if (obj->type == zo_wrapper::WEAKREF)
+                weakref_handle_map_.erase(obj->ptr);
             if (obj->destroy_handler)
                 obj->destroy_handler(obj->ptr TSRMLS_CC);  
         }
@@ -330,7 +338,18 @@ private:
     static void __cctor_wrapper(zo_wrapper* obj, zo_wrapper** cloned_obj TSRMLS_DC) {
         *cloned_obj = new zo_wrapper(*obj TSRMLS_CC);
     }
+
+    static instance_handle_map weakref_handle_map_;
+    static instance_handle_map ref_handle_map_;
 };
+
+template<typename T_, typename Tnoncopyable_>
+typename klass<T_, Tnoncopyable_>::instance_handle_map
+klass<T_, Tnoncopyable_>::weakref_handle_map_;
+
+template<typename T_, typename Tnoncopyable_>
+typename klass<T_, Tnoncopyable_>::instance_handle_map
+klass<T_, Tnoncopyable_>::ref_handle_map_;
 
 template<typename T_>
 T_* object_retriever<T_>::operator()(INTERNAL_FUNCTION_PARAMETERS) const
