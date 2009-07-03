@@ -314,7 +314,7 @@ private:
 
 
     static void __dtor_wrapper(zo_wrapper* obj TSRMLS_DC) {
-        if (obj->type) {
+        if (obj->type == zo_wrapper::REF) {
             typedef typename zo_wrapper::shared_pointer shared_pointer;
             reinterpret_cast<shared_pointer*>(obj->ref)->~shared_pointer();
         } else {
