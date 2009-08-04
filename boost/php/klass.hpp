@@ -34,6 +34,7 @@
 #include <zend_API.h>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/unordered/unordered_map.hpp>
 #include <boost/php/detail/function_template.hpp>
@@ -364,11 +365,11 @@ template<typename T_, typename Tctor_args_>
 static klass<T_>& def_class(char const* name, Tctor_args_ args TSRMLS_DC)
 {
     klass<T_>* retval = new klass<T_>(name);
-    char lowercased_name[retval->name_length + 1];
+    boost::scoped_array<char> lowercased_name(new char[retval->name_length + 1]);
     retval->module = EG(current_module);
     retval->ctor(args);
-    ::zend_str_tolower_copy(lowercased_name, retval->name, retval->name_length);
-    ::zend_hash_update(CG(class_table), lowercased_name, retval->name_length + 1,
+    ::zend_str_tolower_copy(lowercased_name.get(), retval->name, retval->name_length);
+    ::zend_hash_update(CG(class_table), lowercased_name.get(), retval->name_length + 1,
             &retval, sizeof(zend_class_entry*), NULL);
     klass_registry<T_>::value = retval;
     return *retval;
