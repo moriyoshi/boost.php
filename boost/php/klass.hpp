@@ -229,6 +229,14 @@ public:
         return *this;
     }
 
+    klass& implements(::zend_class_entry* iface) {
+        interfaces = reinterpret_cast< ::zend_class_entry **>(
+                ::std::realloc(interfaces,
+                    sizeof(::zend_class_entry*) * (num_interfaces + 1)));
+        interfaces[num_interfaces++] = iface;
+        return *this;
+    }
+
     void fixup() {
         TSRMLS_FETCH();
         BOOST_PHP_BEGIN_CAPTURE_ERROR
@@ -236,6 +244,16 @@ public:
                 this, *this,
                 &function_table, MODULE_PERSISTENT TSRMLS_CC)) {
             throw runtime_error(BOOST_PHP_LAST_ERROR);
+        }
+        if (interfaces) {
+            int _num_interfaces = num_interfaces;
+            ::zend_class_entry** _interfaces = interfaces;
+            interfaces = 0;
+            num_interfaces = 0;
+            for (int i = 0; i < _num_interfaces; ++i) {
+                zend_do_implement_interface(this, _interfaces[i]);
+            }
+            ::std::free(_interfaces);
         }
         BOOST_PHP_END_CAPTURE_ERROR
     }
