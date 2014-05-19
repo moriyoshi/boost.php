@@ -202,7 +202,7 @@ public:
         name = static_cast<char*>(::std::malloc(name_length + 1));
         if (!name)
             throw ::std::bad_alloc();
-        ::std::memcpy(name, _name, name_length + 1);
+        ::std::memcpy(const_cast<char*>(name), _name, name_length + 1);
         create_object = reinterpret_cast<
             ::zend_object_value(*)(::zend_class_entry* TSRMLS_DC)>(&__factory);
     }
@@ -213,7 +213,7 @@ public:
         function_entry& retval =
             function_container<klass>::define_function(name, sig);
         retval.flags |= ZEND_ACC_PUBLIC;
-        builtin_functions = *this;
+        builtin_functions_() = *this;
         return retval;
     }
 
@@ -256,6 +256,22 @@ public:
             ::std::free(_interfaces);
         }
         BOOST_PHP_END_CAPTURE_ERROR
+    }
+
+    zend_function_entry const*& builtin_functions_() {
+#if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4
+        return info.internal.builtin_functions;
+#else
+        return builtin_functions;
+#endif
+    }
+
+    zend_module_entry*& module_() {
+#if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4
+        return info.internal.module;
+#else
+        return module;
+#endif
     }
 
     static void* operator new(std::size_t sz) {
@@ -384,7 +400,7 @@ static klass<T_>& def_class(char const* name, Tctor_args_ args TSRMLS_DC)
 {
     klass<T_>* retval = new klass<T_>(name);
     boost::scoped_array<char> lowercased_name(new char[retval->name_length + 1]);
-    retval->module = EG(current_module);
+    retval->module_() = EG(current_module);
     retval->ctor(args);
     ::zend_str_tolower_copy(lowercased_name.get(), retval->name, retval->name_length);
     ::zend_hash_update(CG(class_table), lowercased_name.get(), retval->name_length + 1,

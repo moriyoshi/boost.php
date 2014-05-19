@@ -64,14 +64,24 @@ struct concrete_arg_info_entry: public ::zend_arg_info {
         name = 0;
         name_len = 0;
         typedef mpl_get_class_name_for_type<T_> mpl_class_name;
-        class_name = const_cast<char*>(mpl_class_name::value);
-        class_name_len = mpl_class_name::value ?
-                ::strlen(mpl_class_name::value): 0;
+        class_name = 0;
+        class_name_len = 0;
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 7)
+        type_hint = 0;
+        allow_null = 1;
+        pass_by_reference = mpl_should_pass_by_ref<T_>::value;
+        is_variadic = 0;
+#elif (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4)
+        type_hint = 0;
+        pass_by_reference = mpl_should_pass_by_ref<T_>::value;
+        allow_null = 1;
+#else
         array_type_hint = 0;
         allow_null = 1;
         pass_by_reference = mpl_should_pass_by_ref<T_>::value;
         return_reference = 0;
         required_num_args = 0;
+#endif
     }
 };
 
@@ -82,12 +92,25 @@ struct concrete_arg_info_header: public ::zend_arg_info {
         name_len = 0;
         class_name = 0;
         class_name_len = 0;
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 7)
+        type_hint = 0;
+        allow_null = 0;
+        pass_by_reference = mpl_should_pass_by_ref<
+            typename Tsig_::return_value_type >::value;
+        is_variadic = 0;
+#elif (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4)
+        type_hint = 0;
+        pass_by_reference = mpl_should_pass_by_ref<
+            typename Tsig_::return_value_type >::value;
+        allow_null = 0;
+#else
         array_type_hint = 0;
         allow_null = 0;
         pass_by_reference = 0;
         return_reference = mpl_should_pass_by_ref<
             typename Tsig_::return_value_type >::value;
         required_num_args = 0;
+#endif
     }
 };
 
